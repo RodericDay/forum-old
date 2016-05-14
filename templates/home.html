@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1">
+</head>
+<body>
+{% block body %}
+<p>Welcome, {{request.user}}!</p>
+<ul>
+<li><a href="{% url 'logout' %}">logout</a></li>
+<li><a href="{% url 'password_change' %}">password_change</a></li>
+</ul>
+{% endblock %}
+</body>
+</html>
+
