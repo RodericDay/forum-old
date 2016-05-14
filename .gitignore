@@ -1,2 +1,6 @@
 __pycache__/
 *.sublime-workspace
+*.sqlite3
+backup.json
+static/
+uploads/

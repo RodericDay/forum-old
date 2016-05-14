@@ -1,9 +1,25 @@
 {
-	"folders":
+	"build_systems":
 	[
 		{
-			"path": "/Users/roderic/Developer/notes"
+			"name": "Test",
+			"selector": "source.python",
+			"shell_cmd": "./manage.py test",
+			"working_dir": "${project_path}"
 		},
+		{
+			"name": "Deploy",
+			"shell_cmd": "bash deploy.sh",
+			"working_dir": "${project_path}/bin"
+		},
+		{
+			"name": "Bash",
+			"selector": "source.shell",
+			"shell_cmd": "bash $file"
+		}
+	],
+	"folders":
+	[
 		{
 			"path": "."
 		}
