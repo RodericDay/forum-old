@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% block body %}
 <p>welcome, {{request.user}}!</p>
-<img src="{{profile.avatar}}"/>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<p><img src="/uploads/{{profile.avatar}}"/></p>
+<p><input name="avatar" type="file" /></p>
+<input type="submit" value="Update">
+</form>
 <nav>
 <a href="{% url 'logout' %}">logout</a>
 </nav>

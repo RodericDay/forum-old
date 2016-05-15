@@ -25,6 +25,13 @@ def login_view(request):
 @login_required(login_url='/login/')
 def home_view(request):
     profile, is_new = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        new_avatar = request.FILES.get("avatar")
+        if new_avatar:
+            profile.avatar = new_avatar
+            profile.save()
+
     return render(request, 'userhub/home.html', {'profile': profile})
 
 @login_required(login_url='/login/')
