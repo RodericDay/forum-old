@@ -8,7 +8,7 @@
 {% for user in user_list %}
 <tr>
 <td>{{user.get_username}}</td>
-<td>{{user.last_login|timesince}}</td>
+<td>{{user.last_login|timesince}} ago</td>
 </tr>
 {% endfor %}
 </table>
