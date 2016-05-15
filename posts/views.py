@@ -3,6 +3,19 @@ from django.http import HttpResponseRedirect
 
 from posts.models import Post
 
+def posts_edit(request, pk):
+    post = Post.objects.get(id=pk)
+    context = {'post': post}
+    if request.method == "POST":
+        content = request.POST['content']
+        if content != '':
+            post.content = request.POST['content']
+            post.save()
+            return HttpResponseRedirect('/')
+        else:
+            context['error'] = "empty posts not allowed"
+    return render(request, 'posts/form.html', context)
+
 def posts_new(request):
     context = {}
     if request.method == "POST":

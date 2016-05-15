@@ -4,7 +4,7 @@
 {% csrf_token %}
 <span style="color: red;">{{error}}</span>
 {{message}}
-<textarea name="content"></textarea>
+<textarea name="content" autofocus>{{post.content}}</textarea>
 <input type="submit" value="Post" />
 </form>
 {% endblock %}

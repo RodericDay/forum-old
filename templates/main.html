@@ -2,9 +2,13 @@
 {% block body %}
 {% for post in posts %}
 <div>
-<img src="uploads/{{post.author.profile.avatar}}" width="20px" />
+<small>
 {{post.author}}
 {{post.created_at.isoformat}}
+<a href="{% url 'edit' post.id %}">edit</a>
+<img src="uploads/{{post.author.profile.avatar}}" width="20px" />
+</small>
+<hr />
 {{post.content}}
 </div>
 {% empty %}
