@@ -38,3 +38,22 @@ def home_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/login')
+
+@login_required(login_url='/login/')
+def change_password_view(request):
+    context = {}
+    if request.method == "POST":
+        try:
+            if not request.user.check_password(request.POST["old"]):
+                raise ValueError("Old password incorrect")
+            if request.POST["new1"] != request.POST["new2"]:
+                raise ValueError("New pair does not match")
+            raw_password = request.POST["new1"]
+            if raw_password == "":
+                raise ValueError("Password needs to be somewhat decent...")
+            request.user.set_password(raw_password)
+            request.user.save()
+            return HttpResponseRedirect("/logout/")
+        except ValueError as e:
+            context["error"] = e
+    return render(request, 'userhub/change_password_form.html', context)
