@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block body %}
 {% for post in posts %}
+<div>
+<img src="uploads/{{post.author.profile.avatar}}" width="20px" />
+{{post.author}}
+{{post.created_at.isoformat}}
+{{post.content}}
+</div>
 {% empty %}
 No posts.
 {% endfor %}

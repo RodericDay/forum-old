@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block body %}
+<form method="post">
+{% csrf_token %}
+<span style="color: red;">{{error}}</span>
+{{message}}
+<textarea name="content"></textarea>
+<input type="submit" value="Post" />
+</form>
+{% endblock %}
