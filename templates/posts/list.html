@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block body %}
+<form method="post">
+{% csrf_token %}
+<input name="content" />
+<input type="submit" value="Quickpost" />
+</form>
+{% for post in posts %}
+<hr>
+{% include 'posts/post.html' %}
+{% empty %}
+No posts.
+{% endfor %}
+{% endblock %}

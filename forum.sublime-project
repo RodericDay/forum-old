@@ -8,12 +8,6 @@
 			"working_dir": "${project_path}"
 		},
 		{
-			"name": "Push",
-			"selector": "text.html.basic",
-			"shell_cmd": "bash push.sh",
-			"working_dir": "${project_path}/bin",
-		},
-		{
 			"name": "Bash",
 			"selector": "source.shell",
 			"shell_cmd": "bash $file"

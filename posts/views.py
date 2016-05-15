@@ -44,4 +44,11 @@ def posts_new(request):
 @login_required(login_url='/login/')
 def posts_view(request):
     context = {"posts": Post.objects.all()}
-    return render(request, 'main.html', context)
+    if request.method == "POST":
+        content = request.POST['content']
+        if content != '':
+            Post.objects.create(author=request.user, content=content)
+            return HttpResponseRedirect('/')
+        else:
+            context['error'] = "empty posts not allowed"
+    return render(request, 'posts/list.html', context)

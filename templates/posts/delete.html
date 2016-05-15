@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block body %}
 <b>delete post</b>
+{% include 'posts/post.html' %}
+<hr>
 <form method="post">
 {% csrf_token %}
-{{post.content}}
 <input type="submit" value="Delete" />
 </form>
 {% endblock %}
