@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 {% block body %}
+<b>{{action}} post</b>
 <form method="post">
 {% csrf_token %}
 <span style="color: red;">{{error}}</span>
 {{message}}
-<textarea name="content" autofocus>{{post.content}}</textarea>
+<p><textarea name="content" rows="20" cols="25" autofocus>
+{{post.content}}
+</textarea>
+</p>
 <input type="submit" value="Post" />
 </form>
 {% endblock %}

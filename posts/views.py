@@ -12,7 +12,7 @@ def posts_delete(request, pk):
 
 def posts_edit(request, pk):
     post = Post.objects.get(id=pk)
-    context = {'post': post}
+    context = {'action': 'edit', 'post': post}
     if request.method == "POST":
         content = request.POST['content']
         if content != '':
@@ -24,7 +24,7 @@ def posts_edit(request, pk):
     return render(request, 'posts/form.html', context)
 
 def posts_new(request):
-    context = {}
+    context = {'action': 'new'}
     if request.method == "POST":
         content = request.POST['content']
         if content != '':

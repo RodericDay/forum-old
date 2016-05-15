@@ -4,7 +4,7 @@
 <div>
 <small>
 {{post.author}}
-{{post.created_at.isoformat}}
+{{post.created_at|timesince}} ago
 <a href="{% url 'edit' post.id %}">edit</a>
 <a href="{% url 'delete' post.id %}">delete</a>
 <img src="uploads/{{post.author.profile.avatar}}" width="20px" />
