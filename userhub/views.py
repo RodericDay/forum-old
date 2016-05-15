@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
-from userhub.models import Profile
+from userhub.models import User, Profile
 
 def login_view(request):
     if request.method == "GET":
@@ -57,3 +57,15 @@ def change_password_view(request):
         except ValueError as e:
             context["error"] = e
     return render(request, 'userhub/change_password_form.html', context)
+
+@login_required(login_url='/login/')
+def user_list_view(request):
+    context = {}
+    if request.method == "POST":
+        username = request.POST["new_username"]
+        if username:
+            user = User.objects.create(username=username)
+            user.set_password("password")
+            user.save()
+    context["user_list"] = User.objects.all()
+    return render(request, 'userhub/user_list.html', context)
