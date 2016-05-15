@@ -61,7 +61,7 @@ def change_password_view(request):
 @login_required(login_url='/login/')
 def user_list_view(request):
     context = {}
-    if request.method == "POST":
+    if request.user.is_superuser and request.method == "POST":
         username = request.POST["new_username"]
         if username:
             user = User.objects.create(username=username)
