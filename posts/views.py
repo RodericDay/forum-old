@@ -3,6 +3,13 @@ from django.http import HttpResponseRedirect
 
 from posts.models import Post
 
+def posts_delete(request, pk):
+    post = Post.objects.get(id=pk)
+    if request.method == "POST":
+        post.delete()
+        return HttpResponseRedirect('/')
+    return render(request, 'posts/delete.html', {'post': post})
+
 def posts_edit(request, pk):
     post = Post.objects.get(id=pk)
     context = {'post': post}

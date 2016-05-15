@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^$', posts_view, name='posts'),
     url(r'^new/$', posts_new, name='new'),
     url(r'^edit/(\d+)$', posts_edit, name='edit'),
+    url(r'^delete/(\d+)$', posts_delete, name='delete'),
     url(r'^profile/$', home_view, name='profile'),
     url(r'^login/$', login_view, name='login'),
     url(r'^logout/$', logout_view, name='logout'),
