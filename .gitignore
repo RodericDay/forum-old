@@ -4,3 +4,4 @@ __pycache__/
 backup.json
 static/
 uploads/
+.DS_Store

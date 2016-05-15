@@ -10,3 +10,4 @@ class TestSuite(TestCase):
         self.client.force_login(user)
         response = self.client.get('/')
         self.assertContains(response, "welcome, Anne!")
+        self.assertContains(response, "avatars/default.jpg")

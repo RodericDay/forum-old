@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
+from userhub.models import Profile
 
 def login_view(request):
     if request.method == "GET":
@@ -23,7 +24,8 @@ def login_view(request):
 
 @login_required(login_url='/login/')
 def home_view(request):
-    return render(request, 'userhub/home.html')
+    profile, is_new = Profile.objects.get_or_create(user=request.user)
+    return render(request, 'userhub/home.html', {'profile': profile})
 
 @login_required(login_url='/login/')
 def logout_view(request):
