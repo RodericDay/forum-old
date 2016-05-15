@@ -8,6 +8,6 @@ class TestSuite(TestCase):
     def test_home(self):
         user = User.objects.create(username="Anne")
         self.client.force_login(user)
-        response = self.client.get('/')
+        response = self.client.get('/profile/')
         self.assertContains(response, "welcome, Anne!")
         self.assertContains(response, "avatars/default.jpg")

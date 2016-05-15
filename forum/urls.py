@@ -2,10 +2,12 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 
+from posts.views import *
 from userhub.views import *
 
 urlpatterns = [
-    url(r'^$', home_view, name='home'),
+    url(r'^$', posts_view, name='posts'),
+    url(r'^profile/$', home_view, name='profile'),
     url(r'^login/$', login_view, name='login'),
     url(r'^logout/$', logout_view, name='logout'),
 ]

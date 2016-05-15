@@ -6,7 +6,14 @@
 <title>forum.roderic.ca</title>
 </head>
 <body>
+{% block nav %}
+<nav>
+<a href="{% url 'posts' %}">posts</a>
+<a href="{% url 'profile' %}">profile</a>
+</nav>
+{% endblock %}
 {% block body %}
+This is the base template. Add a body block!
 {% endblock %}
 </body>
 </html>
