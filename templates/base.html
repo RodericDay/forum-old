@@ -7,13 +7,15 @@
 <style>
 .avatar { float: right; }
 a, sup { color: red; }
+#quickpost { position: fixed; bottom: 0; }
 </style>
 </head>
 <body>
 {% block nav %}
 <nav>
 <a href="{% url 'new' %}">new</a>
-<a href="{% url 'posts' %}">posts</a>
+<a href="{% url 'posts' %}">top</a>
+<a href="{% url 'posts' %}#latest">latest</a>
 <a href="{% url 'profile' %}">profile</a>
 <a href="{% url 'user_list' %}">users</a>
 </nav>

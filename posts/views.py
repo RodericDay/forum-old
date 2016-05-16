@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import render
+from django.template.loader import render_to_string
 from posts.models import Post
 
 @login_required(login_url='/login/')
@@ -10,7 +11,7 @@ def posts_delete(request, pk):
         return HttpResponseForbidden()
     if request.method == "POST":
         post.delete()
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/#latest')
     return render(request, 'posts/delete.html', {'post': post})
 
 @login_required(login_url='/login/')
@@ -24,7 +25,8 @@ def posts_edit(request, pk):
         if content != '':
             post.content = request.POST['content']
             post.save()
-            return HttpResponseRedirect('/')
+            url = "/#{}".format(post.id)
+            return HttpResponseRedirect(url)
         else:
             context['error'] = "empty posts not allowed"
     return render(request, 'posts/form.html', context)
@@ -52,3 +54,13 @@ def posts_view(request):
         else:
             context['error'] = "empty posts not allowed"
     return render(request, 'posts/list.html', context)
+
+@login_required(login_url='/login/')
+def posts_status(request):
+    f = lambda p: render_to_string('posts/post.html', {'post': p})
+    if request.method == "POST" and "content" in request.POST:
+        content = request.POST['content']
+        if content != '':
+            Post.objects.create(author=request.user, content=content)
+    html = '<hr>' + '<hr>'.join(f(p) for p in Post.objects.all())
+    return HttpResponse(html)
