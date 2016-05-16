@@ -1,8 +1,12 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render
 from django.template.loader import render_to_string
+
 from posts.models import Post
+
 
 @login_required(login_url='/login/')
 def posts_delete(request, pk):
@@ -57,10 +61,13 @@ def posts_view(request):
 
 @login_required(login_url='/login/')
 def posts_status(request):
-    f = lambda p: render_to_string('posts/post.html', {'post': p})
     if request.method == "POST" and "content" in request.POST:
         content = request.POST['content']
         if content != '':
             Post.objects.create(author=request.user, content=content)
-    html = '<hr>' + '<hr>'.join(f(p) for p in Post.objects.all())
-    return HttpResponse(html)
+    last = request.POST.get('timestamp', 0)
+    modified = Post.objects.filter(modified_at__gt=last)
+    render = lambda post: render_to_string('posts/post.html', {'post': post})
+    html_slugs = [{"id": post.id, "html": render(post)} for post in modified]
+    string = json.dumps(html_slugs)
+    return HttpResponse(string)

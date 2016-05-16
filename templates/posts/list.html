@@ -8,33 +8,6 @@
 No posts.
 {% endfor %}
 </div>
-<div id="latest"><br></div>
-<form id="quickpost" method="post" onsubmit="return query(true)" action="#latest">
-{% csrf_token %}
-<input name="content" autofocus autocomplete="off" />
-<input type="submit" value="Quickpost" />
-</form>
-<script>
-function load() {
-    var atBottom = window.scrollY + window.innerHeight > latest.offsetTop;
-    container.innerHTML = this.response;
-    if (atBottom) {
-        latest.scrollIntoView();
-    }
-}
-function query(isSubmission) {
-    var payload = "csrfmiddlewaretoken="+quickpost.csrfmiddlewaretoken.value;
-    if (isSubmission) {
-        payload += "&content="+quickpost.content.value;
-        quickpost.content.value = '';
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.open("post", "/status/", true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.send(payload);
-    xhr.onload = load;
-    return false
-}
-window.setInterval(query, 5000);
-</script>
+<div id="latest" style="color: transparent;">{% now 'Y-m-d H:i' %}</div>
+{% include 'posts/quickpost_form.html' %}
 {% endblock %}
