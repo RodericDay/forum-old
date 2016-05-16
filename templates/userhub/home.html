@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block body %}
 <p>welcome, {{request.user}}!</p>
+{% with count=request.user.post_set.count %}
+<p>{{count}} post{{count|pluralize}}</p>
+{% endwith %}
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
 <p><img src="/uploads/{{profile.avatar}}" width="100px"/></p>
