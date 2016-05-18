@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+<b>new topic</b>
+<form method="post">
+{% csrf_token %}
+<span style="color: red;">{{error}}</span>
+<p>
+<input name="name" value="{{topic.name}}" autofocus autocomplete="off"/>
+</p>
+<p>
+<textarea name="content" rows="17" cols="45">{{post.content}}</textarea>
+</p>
+<input type="submit" value="Save" />
+</form>
+{% endblock %}

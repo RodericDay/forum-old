@@ -4,7 +4,6 @@
 <form method="post">
 {% csrf_token %}
 <span style="color: red;">{{error}}</span>
-{{message}}
 <p>
 <textarea name="content" rows="17" cols="45" autofocus>{{post.content}}</textarea>
 </p>

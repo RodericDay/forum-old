@@ -13,11 +13,11 @@ a, sup { color: red; }
 <body>
 {% block nav %}
 <nav>
-<a href="{% url 'new' %}">new</a>
-<a href="{% url 'posts' %}">top</a>
-<a href="{% url 'posts' %}#latest">latest</a>
+{% block actions %}
+{% endblock %}
+<a href="{% url 'topics-list' %}">topics</a>
 <a href="{% url 'profile' %}">profile</a>
-<a href="{% url 'user_list' %}">users</a>
+<a href="{% url 'user-list' %}">users</a>
 </nav>
 {% endblock %}
 {% block body %}

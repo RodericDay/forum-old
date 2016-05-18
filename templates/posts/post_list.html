@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% block actions %}
+<a href="{% url 'posts-new' topic.id %}">reply</a>
+{% endblock %}
 {% block body %}
+<b>{{topic.name}}</b>
 <div id="container">
-{% for post in posts %}
+{% for post in post_list %}
 <hr>
 {% include 'posts/post.html' %}
 {% empty %}

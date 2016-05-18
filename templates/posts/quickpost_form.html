@@ -21,14 +21,15 @@ function load() {
     }
 }
 function query(isSubmission) {
-    var payload = "csrfmiddlewaretoken="+quickpost.csrfmiddlewaretoken.value;
+    var payload = "topic={{topic.id}}"
+    payload += "&csrfmiddlewaretoken="+quickpost.csrfmiddlewaretoken.value;
     payload += "&timestamp="+latest.innerHTML;
     if (isSubmission) {
         payload += "&content="+quickpost.content.value;
         quickpost.content.value = '';
     }
     var xhr = new XMLHttpRequest();
-    xhr.open("post", "/status/", true);
+    xhr.open("post", "{% url 'posts-ajax' topic.id %}", true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send(payload);
     xhr.onload = load;
