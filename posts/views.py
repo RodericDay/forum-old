@@ -8,7 +8,6 @@ from django.template.loader import render_to_string
 from posts.models import Post
 
 
-@login_required(login_url='/login/')
 def posts_delete(request, pk):
     post = Post.objects.get(id=pk)
     if not (request.user.is_superuser or request.user == post.author):
@@ -18,7 +17,6 @@ def posts_delete(request, pk):
         return HttpResponseRedirect('/#latest')
     return render(request, 'posts/delete.html', {'post': post})
 
-@login_required(login_url='/login/')
 def posts_edit(request, pk):
     post = Post.objects.get(id=pk)
     if request.user != post.author:
@@ -35,7 +33,6 @@ def posts_edit(request, pk):
             context['error'] = "empty posts not allowed"
     return render(request, 'posts/form.html', context)
 
-@login_required(login_url='/login/')
 def posts_new(request):
     context = {'action': 'new'}
     if request.method == "POST":
@@ -47,7 +44,6 @@ def posts_new(request):
             context['error'] = "empty posts not allowed"
     return render(request, 'posts/form.html', context)
 
-@login_required(login_url='/login/')
 def posts_view(request):
     context = {"posts": Post.objects.all()}
     if request.method == "POST":
@@ -59,7 +55,6 @@ def posts_view(request):
             context['error'] = "empty posts not allowed"
     return render(request, 'posts/list.html', context)
 
-@login_required(login_url='/login/')
 def posts_status(request):
     if request.method == "POST" and "content" in request.POST:
         content = request.POST['content']

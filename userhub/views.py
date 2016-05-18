@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 
 from userhub.models import User, Profile
 
+
 def login_view(request):
     if request.method == "GET":
         return render(request, 'userhub/login.html')
@@ -15,14 +16,13 @@ def login_view(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect("/profile/")
         else:
             context = {'error': 'disabled account'}
     else:
         context = {'error': 'invalid login'}
     return render(request, 'userhub/login.html', context)
 
-@login_required(login_url='/login/')
 def home_view(request):
     profile, is_new = Profile.objects.get_or_create(user=request.user)
 
@@ -34,12 +34,10 @@ def home_view(request):
 
     return render(request, 'userhub/home.html', {'profile': profile})
 
-@login_required(login_url='/login/')
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/login')
 
-@login_required(login_url='/login/')
 def change_password_view(request):
     context = {}
     if request.method == "POST":
@@ -58,7 +56,6 @@ def change_password_view(request):
             context["error"] = e
     return render(request, 'userhub/change_password_form.html', context)
 
-@login_required(login_url='/login/')
 def user_list_view(request):
     context = {}
     if request.user.is_superuser and request.method == "POST":
