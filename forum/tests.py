@@ -1,6 +1,7 @@
 from django.test import TestCase
-
 from django.contrib.auth.models import User
+
+from posts.template_tags import bleach
 
 
 class TestSuite(TestCase):
@@ -39,3 +40,8 @@ class TestSuite(TestCase):
         response = self.client.post('/posts/1/delete/', follow=True)
         self.assertNotContains(response, "57")
         self.assertContains(response, "deleted")
+
+    def test_bleach(self):
+        self.assertEquals('</spoiler>', bleach('&lt;/spoiler&gt;'))
+        self.assertEquals('<img src="http://u.rl"/>',
+                    bleach('&lt;img src=&quot;http://u.rl&quot;/&gt;'))

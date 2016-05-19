@@ -1,3 +1,4 @@
+{% load posts_tags %}
 <div id="{{post.id}}">
 <small>
 {{post.author}}
@@ -7,5 +8,5 @@
 <img class="avatar" src="/uploads/{{post.author.profile.avatar}}" width="40px"/>
 </small>
 <br>
-{{post.content|linebreaks|urlize}}
+{{post.content|linebreaks|urlize|bleach}}
 </div>
