@@ -10,6 +10,9 @@ class Post(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     content = models.TextField()
 
+    def get_absolute_url(self):
+        return reverse('posts-edit', args=[self.id])
+
 
 class Tag(models.Model):
     ACCESS_CHOICES = [

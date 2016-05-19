@@ -7,7 +7,7 @@
 function createOrUpdate(slug) {
     var existing = document.getElementById(slug.id);
     if (!existing) {
-        container.innerHTML += "<hr>" + slug.html;
+        container.innerHTML += slug.html;
     } else {
         existing.outerHTML = slug.html;
     }

@@ -37,16 +37,15 @@ def posts_new(request, topic_id):
 
 def posts_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if request.user != post.author:
-        return HttpResponseForbidden()
     context = {'action': 'edit', 'post': post}
     if request.method == "POST":
+        if request.user != post.author:
+            return HttpResponseForbidden()
         content = request.POST['content']
         if content != '':
             post.content = request.POST['content']
             post.save()
-            topic = post.topic_set.first()
-            url = topic.get_absolute_url() + "#" + str(post.id)
+            url = post.get_absolute_url()
             return HttpResponseRedirect(url)
         else:
             context['error'] = "empty posts not allowed"
@@ -54,15 +53,13 @@ def posts_edit(request, post_id):
 
 def posts_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if not (request.user.is_superuser or request.user == post.author):
-        return HttpResponseForbidden()
     if request.method == "POST":
+        if not (request.user.is_superuser or request.user == post.author):
+            return HttpResponseForbidden()
         post.content = "[deleted]"
         post.save()
-        topic = post.topic_set.first()
-        url = topic.get_absolute_url() + "#" + str(post.id)
-        return HttpResponseRedirect(url)
-    return render(request, 'posts/delete.html', {'post': post})
+        url = post.get_absolute_url()
+    return HttpResponseRedirect(url)
 
 def posts_ajax(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)

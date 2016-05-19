@@ -14,7 +14,7 @@ def topics_new(request):
     context = {}
     if request.method == 'POST':
         topic_name = request.POST["name"]
-        if len(topic_name) > 5:
+        if len(topic_name) >= 5:
             content = request.POST.get("content", "")
             topic = Topic.objects.create(author=request.user, name=topic_name)
             topic.posts.create(author=request.user, content=content)

@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block body %}
 <b>{{action}} post</b>
+{% if post.id %}
+{% include 'posts/post.html' %}
+{% endif %}
 <form method="post">
 {% csrf_token %}
 <span style="color: red;">{{error}}</span>
@@ -9,4 +12,10 @@
 </p>
 <input type="submit" value="Save" />
 </form>
+{% if post.id %}
+<form method="post" action="{% url 'posts-delete' post.id %}">
+{% csrf_token %}
+<input type="submit" value="Delete" />
+</form>
+{% endif %}
 {% endblock %}

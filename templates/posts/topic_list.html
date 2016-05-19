@@ -3,24 +3,16 @@
 <a href="{% url 'topics-new' %}">new</a>
 {% endblock %}
 {% block body %}
-<table>
-<tr>
-<th>topic</th>
-<th>author</th>
-<th>last post</th>
-</tr>
 {% for topic in topic_list %}
-<tr>
-<td>
+<p>
+<span style="float: right;">{{topic.posts.last.created_at|timesince}} ago</span>
 {% spaceless %}
-<a href="{{topic.get_absolute_url}}">&lt;</a>
-<a href="{{topic.get_absolute_url}}">{{topic.name}}</a>
-<a href="{{topic.get_absolute_url}}#latest">&gt;</a>
+<a href="{{topic.get_absolute_url}}">&lt;&lt;</a>
+<a href="{{topic.get_absolute_url}}#latest">{{topic.name}}</a>
+<a href="{{topic.get_absolute_url}}#latest">&gt;&gt;</a>
 {% endspaceless %}
-</td>
-<td>{{topic.author}}</td>
-<td>{{topic.posts.last.created_at|timesince}} ago</td>
-</tr>
+<small>{{topic.author}}</small>
+</p>
 {% endfor %}
 </div>
 {% endblock %}

@@ -45,3 +45,11 @@ class TestSuite(TestCase):
         self.assertEquals('</spoiler>', bleach('&lt;/spoiler&gt;'))
         self.assertEquals('<img src="http://u.rl"/>',
                     bleach('&lt;img src=&quot;http://u.rl&quot;/&gt;'))
+
+    def test_modifications_by_different_user(self):
+        user = User.objects.create(username="Ludwig")
+        self.client.force_login(user)
+        response = self.client.post('/posts/1/edit/', {'content': "lion"}, follow=True)
+        self.assertEquals(response.status_code, 403)
+        response = self.client.post('/posts/1/delete/', follow=True)
+        self.assertEquals(response.status_code, 403)
