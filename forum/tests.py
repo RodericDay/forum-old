@@ -27,6 +27,7 @@ class TestSuite(TestCase):
     def test_quickpost_and_list(self):
         response = self.client.post('/topics/1/', {'content': "57"}, follow=True)
         self.assertContains(response, "57")
+        self.assertContains(response, "#1")
 
     def test_post_then_list(self):
         response = self.client.post('/topics/1/new/', {'content': "57"}, follow=True)

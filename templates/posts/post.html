@@ -5,6 +5,7 @@
 {{post.author}}
 {{post.created_at}}
 <a href="{% url 'posts-edit' post.id %}">detail</a>
+{% if forloop %} #{{forloop.counter}}{% endif %}
 <img class="avatar" src="/uploads/{{post.author.profile.avatar}}" width="40px"/>
 </small>
 <p>{{post.content|linebreaksbr|urlizetrunc:35|bleach}}</p>
