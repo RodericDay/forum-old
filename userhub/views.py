@@ -1,3 +1,5 @@
+import pytz
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -24,15 +26,23 @@ def login_view(request):
     return render(request, 'userhub/login.html', context)
 
 def home_view(request):
-    profile, is_new = Profile.objects.get_or_create(user=request.user)
+    profile = request.user.profile
 
     if request.method == "POST":
+        tz = request.POST.get("timezone")
         new_avatar = request.FILES.get("avatar")
         if new_avatar:
             profile.avatar = new_avatar
-            profile.save()
+        if tz in pytz.common_timezones:
+            profile.timezone = tz
+        profile.save()
+        return HttpResponseRedirect('/profile/')
 
-    return render(request, 'userhub/home.html', {'profile': profile})
+    context = {
+        'profile': profile,
+        'timezones': pytz.common_timezones,
+    }
+    return render(request, 'userhub/home.html', context)
 
 def logout_view(request):
     logout(request)

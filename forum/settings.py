@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'userhub',
     'posts',
 ]
@@ -51,6 +52,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'forum.middleware.LoginRequiredEverywhereMiddleware',
+    'forum.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'forum.urls'

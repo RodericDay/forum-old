@@ -3,7 +3,7 @@
 <hr>
 <small>
 {{post.author}}
-{{post.created_at|timesince}} ago
+{{post.created_at}}
 <a href="{% url 'posts-edit' post.id %}">detail</a>
 <img class="avatar" src="/uploads/{{post.author.profile.avatar}}" width="40px"/>
 </small>

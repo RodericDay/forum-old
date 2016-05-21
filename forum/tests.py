@@ -53,3 +53,7 @@ class TestSuite(TestCase):
         self.assertEquals(response.status_code, 403)
         response = self.client.post('/posts/1/delete/', follow=True)
         self.assertEquals(response.status_code, 403)
+
+    def test_post_bad_timezone(self):
+        self.client.post('/profile/', {'timezone': '???'})
+        self.client.get('/')

@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block actions %}
+<a href="{% url 'user-list' %}">users</a>
+{% endblock %}
 {% block body %}
 <p>welcome, {{request.user}}!</p>
 {% with count=request.user.post_set.count %}
@@ -8,6 +11,13 @@
 {% csrf_token %}
 <p><img src="/uploads/{{profile.avatar}}" width="100px"/></p>
 <p><input name="avatar" type="file" /></p>
+<p><select name="timezone">
+{% for tz in timezones %}
+<option value="{{tz}}"{% if tz == profile.timezone %} selected {% endif %}>
+{{tz}}
+</option>
+{% endfor %}
+</select></p>
 <input type="submit" value="Update">
 </form>
 <nav>

@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% block actions %}
 <a href="{% url 'topics-new' %}">new</a>
 {% endblock %}
 {% block body %}
 {% for topic in topic_list %}
 <p>
-<span style="float: right;">{{topic.posts.last.created_at|timesince}} ago</span>
+<span style="float: right;">{{topic.posts.last.created_at|naturaltime}}</span>
 {% spaceless %}
 <a href="{{topic.get_absolute_url}}">&lt;&lt;</a>
 <a href="{{topic.get_absolute_url}}#latest">{{topic.name}}</a>
