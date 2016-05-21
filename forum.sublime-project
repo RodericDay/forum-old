@@ -4,7 +4,7 @@
 		{
 			"name": "Test",
 			"selector": "source.python",
-			"shell_cmd": "./manage.py makemigrations && ./manage.py test",
+			"shell_cmd": "bin/test.sh",
 			"working_dir": "${project_path}"
 		},
 		{
