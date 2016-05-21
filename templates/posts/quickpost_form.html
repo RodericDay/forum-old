@@ -8,6 +8,8 @@ function createOrUpdate(slug) {
     var existing = document.getElementById(slug.id);
     if (!existing) {
         container.innerHTML += slug.html;
+        notificationCount += 1;
+        document.title = originalTitle + " (" + notificationCount + ")";
     } else {
         existing.outerHTML = slug.html;
     }
@@ -16,8 +18,10 @@ function load() {
     var atBottom = window.scrollY + window.innerHeight > latest.offsetTop;
     JSON.parse(this.response).forEach(createOrUpdate);
     latest.innerHTML = (new Date()).toISOString();
-    if (atBottom) {
+    if (!document.hidden & atBottom) {
         latest.scrollIntoView();
+        notificationCount = 0;
+        document.title = originalTitle;
     }
 }
 function query(isSubmission) {
@@ -35,5 +39,7 @@ function query(isSubmission) {
     xhr.onload = load;
     return false
 }
+var originalTitle = document.title;
+var notificationCount = 0;
 window.setInterval(query, 5000);
 </script>
