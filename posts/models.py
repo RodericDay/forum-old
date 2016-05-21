@@ -13,6 +13,9 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('posts-edit', args=[self.id])
 
+    def allows_access(self, user):
+        return user.is_superuser or user == self.author
+
 
 class Tag(models.Model):
     ACCESS_CHOICES = [
@@ -20,9 +23,12 @@ class Tag(models.Model):
         (1, "whitelist"),
         (2, "blacklist"),
     ]
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=60, unique=True)
     access_list = models.ManyToManyField(User)
     access_mode = models.IntegerField(default=0, choices=ACCESS_CHOICES)
+
+    def get_absolute_url(self):
+        return reverse('tags-edit', args=[self.name])
 
 
 class Topic(models.Model):
@@ -34,3 +40,15 @@ class Topic(models.Model):
 
     def get_absolute_url(self):
         return reverse('posts-list', args=[self.id])
+
+    def tags_as_string(self):
+        return ", ".join(tag.name for tag in self.tags.all())
+
+    def allows_access(self, user):
+        for tag in self.tags.all().filter(access_mode=1): # whitelist
+            if not user in tag.access_list.all():
+                return False
+        for tag in self.tags.all().filter(access_mode=2): # blacklist
+            if user in tag.access_list.all():
+                return False
+        return True

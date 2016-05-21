@@ -1,0 +1,7 @@
+{% if user.is_superuser %}
+<form method="post" action="{% url 'topic-tags-edit' topic.id %}">
+{% csrf_token %}
+<input name="tags_as_string" value="{{topic.tags_as_string}}" />
+<input type="submit" value="Save" />
+</form>
+{% endif %}

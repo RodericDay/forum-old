@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block body %}
+<b>{{tag.name}}</b>
+<form method="post">
+{% csrf_token %}
+<p><input name="name" value="{{tag.name}}" /></p>
+<p>
+<select name="access_mode">
+{% for value, name in tag.ACCESS_CHOICES %}
+  <option value="{{value}}" {% if value == tag.access_mode %} selected {% endif %}>
+  {{name}}
+  </option>
+{% endfor %}
+</select>
+</p>
+<p>
+<select multiple name="access_list" size="20">
+{% for user in user_list %}
+  <option value="{{user.id}}" {% if user in tag.access_list.all %} selected {% endif %}>
+  {{user.get_username}}
+  </option>
+{% endfor %}
+</select>
+</p>
+<p>
+<input type="submit" value="Update" />
+</p>
+</form>
+{% endblock %}

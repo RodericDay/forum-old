@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block body %}
+<b>tag list</b>
+<p>
+{% for tag in tag_list %}
+<a href="{% url 'tags-edit' tag.name %}">{{tag.name}}</a><br />
+{% endfor %}
+</p>
+{% if request.user.is_superuser %}
+<form method="post">
+{% csrf_token %}
+<input name="name" />
+<input type="submit" value="New" />
+</form>
+{% endif %}
+{% endblock %}

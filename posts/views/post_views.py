@@ -1,15 +1,18 @@
 import json
 
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 
-from posts.models import Post, Topic
+from posts.models import Post, Topic, Tag
 
 
 def posts_list(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
+    if not topic.allows_access(request.user):
+        return HttpResponseForbidden()
+
     context = {"topic": topic, "post_list": topic.posts.all()}
     # fallback in case quickpost attempted with js disabled
     if request.method == "POST":
@@ -24,6 +27,9 @@ def posts_list(request, topic_id):
 
 def posts_new(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
+    if not topic.allows_access(request.user):
+        return HttpResponseForbidden()
+
     context = {'action': 'new'}
     if request.method == "POST":
         content = request.POST['content']
@@ -37,10 +43,11 @@ def posts_new(request, topic_id):
 
 def posts_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    if not post.allows_access(request.user):
+        return HttpResponseForbidden()
+
     context = {'action': 'edit', 'post': post}
     if request.method == "POST":
-        if request.user != post.author:
-            return HttpResponseForbidden()
         content = request.POST['content']
         if content != '':
             post.content = request.POST['content']
@@ -53,9 +60,10 @@ def posts_edit(request, post_id):
 
 def posts_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    if not post.allows_access(request.user):
+        return HttpResponseForbidden()
+
     if request.method == "POST":
-        if not (request.user.is_superuser or request.user == post.author):
-            return HttpResponseForbidden()
         post.content = "[deleted]"
         post.save()
         url = post.get_absolute_url()
@@ -63,6 +71,9 @@ def posts_delete(request, post_id):
 
 def posts_ajax(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
+    if not topic.allows_access(request.user):
+        return HttpResponseForbidden()
+
     if request.method == "POST" and "content" in request.POST:
         content = request.POST['content']
         if content != '':

@@ -11,8 +11,13 @@
 <a href="{{topic.get_absolute_url}}">&lt;&lt;</a>
 <a href="{{topic.get_absolute_url}}#latest">{{topic.name}}</a>
 <a href="{{topic.get_absolute_url}}#latest">&gt;&gt;</a>
+<small>
+{{topic.author}}
+{% if topic.tags.count %}
+({{topic.tags_as_string}})
+{% endif %}
+</small>
 {% endspaceless %}
-<small>{{topic.author}}</small>
 </p>
 {% endfor %}
 </div>

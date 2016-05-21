@@ -7,7 +7,9 @@ from posts.models import Topic
 
 def topics_list(request):
     topics = Topic.objects.annotate(last_post=Max('posts__created_at'))
-    context = {'topic_list': topics.order_by('-last_post')}
+    ordered = topics.order_by('-last_post')
+    visible = [topic for topic in ordered if topic.allows_access(request.user)]
+    context = {'topic_list': visible}
     return render(request, 'posts/topic_list.html', context)
 
 def topics_new(request):

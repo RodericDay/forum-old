@@ -4,6 +4,7 @@
 {% endblock %}
 {% block body %}
 <b>{{topic.name}}</b>
+{% include 'posts/topic_tag_form.html' %}
 <div id="container">
 {% for post in post_list %}
 {% include 'posts/post.html' %}
