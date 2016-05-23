@@ -2,10 +2,10 @@ import pytz
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 
-from userhub.models import User, Profile
+from userhub.models import User, Profile, Image
 
 
 def login_view(request):
@@ -76,3 +76,22 @@ def user_list_view(request):
             user.save()
     context["user_list"] = User.objects.all()
     return render(request, 'userhub/user_list.html', context)
+
+def images_list(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+
+    context = {'image_list': Image.objects.all()}
+    if request.method == "POST":
+        raw = request.FILES.get("raw")
+        if raw:
+            Image.objects.create(raw=raw, uploader=request.user)
+        return HttpResponseRedirect('/images/')
+    return render(request, 'userhub/images.html', context)
+
+def images_delete(request, image_id):
+    if request.user.is_superuser and request.method == "POST":
+        image = get_object_or_404(Image, id=image_id)
+        image.full_delete()
+        return HttpResponseRedirect('/images/')
+    return HttpResponseForbidden()

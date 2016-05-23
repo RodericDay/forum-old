@@ -26,6 +26,9 @@ urlpatterns = [
     url(r'^tags/$', tags_list, name='tags-list'),
     url(r'^tags/(.+)/$', tags_edit, name='tags-edit'),
 
+    url(r'^images/$', images_list, name='images-list'),
+    url(r'^images/(\d+)/delete/$', images_delete, name='images-delete'),
+
     url(r'^profile/$', home_view, name='profile'),
     url(r'^login/$', login_view, name='login'),
     url(r'^logout/$', logout_view, name='logout'),

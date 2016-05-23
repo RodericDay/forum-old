@@ -21,6 +21,9 @@ spoiler { color: white; } /* should be same as background */
 <a href="{% url 'topics-list' %}">topics</a>
 <a href="{% url 'tags-list' %}">tags</a>
 <a href="{% url 'profile' %}">profile</a>
+{% if request.user.is_superuser %}
+<a href="{% url 'images-list' %}">images</a>
+{% endif %}
 </nav>
 {% endblock %}
 {% block body %}

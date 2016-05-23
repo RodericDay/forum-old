@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block body %}
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<input type="file" name="raw" />
+<input type="submit" value="Upload" />
+</form>
+
+<table>
+{% for image in image_list %}
+<tr>
+<td><img src="/uploads/{{image.raw}}" width="200"/></td>
+<td>{{image.uploader}}</td>
+<td>{{image.created_at}}</td>
+<td>
+<form method="post" action="{% url 'images-delete' image.id %}">
+{% csrf_token %}
+<input type="submit" value="Delete"/>
+</form>
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
