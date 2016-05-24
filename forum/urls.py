@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^topics/(\d+)/$', posts_list, name='posts-list'),
     url(r'^topics/(\d+)/new/$', posts_new, name='posts-new'),
     url(r'^topics/(\d+)/ajax/$', posts_ajax, name='posts-ajax'),
+    url(r'^topics/(\d+)/squash/(\d+)/$', posts_squash, name='posts-squash'),
 
     url(r'^posts/(\d+)/edit/$', posts_edit, name='posts-edit'),
     url(r'^posts/(\d+)/delete/$', posts_delete, name='posts-delete'),

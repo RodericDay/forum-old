@@ -58,3 +58,10 @@ class TestSuite(TestCase):
     def test_post_bad_timezone(self):
         self.client.post('/profile/', {'timezone': '???'})
         self.client.get('/')
+
+    def test_post_squash(self):
+        self.client.post('/topics/1/new/', {'content': "5"})
+        self.client.post('/topics/1/new/', {'content': "7"})
+        response = self.client.post('/topics/1/squash/3/', follow=True)
+        self.assertNotContains(response, "#3")
+        self.assertContains(response, "5<br />7")

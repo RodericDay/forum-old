@@ -84,3 +84,15 @@ def posts_ajax(request, topic_id):
     html_slugs = [{"id": post.id, "html": render(post)} for post in modified]
     string = json.dumps(html_slugs)
     return HttpResponse(string)
+
+def posts_squash(request, topic_id, post_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+    all_posts = topic.posts.filter(id__lte=post_id).order_by("-created_at")
+    tail_post, head_post = all_posts[:2]
+    if head_post.author == tail_post.author:
+        if request.user == head_post.author or request.user.is_superuser:
+            head_post.content += '\n\n' + tail_post.content
+            head_post.save()
+            tail_post.delete()
+    url = topic.get_absolute_url() + "#" + str(head_post.id)
+    return HttpResponseRedirect(url)
