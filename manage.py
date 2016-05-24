@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!.venvs/django/bin/python
 import os
 import sys
 
