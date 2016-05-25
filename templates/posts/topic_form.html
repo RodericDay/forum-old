@@ -4,12 +4,8 @@
 <form method="post">
 {% csrf_token %}
 <span style="color: red;">{{error}}</span>
-<p>
 <input name="name" value="{{topic.name}}" autofocus autocomplete="off"/>
-</p>
-<p>
-<textarea name="content" rows="17" cols="45">{{post.content}}</textarea>
-</p>
+<textarea name="content">{{post.content}}</textarea>
 <input type="submit" value="Save" />
 </form>
 {% endblock %}

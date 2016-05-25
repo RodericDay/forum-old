@@ -74,7 +74,7 @@ def user_list_view(request):
             user = User.objects.create(username=username)
             user.set_password("password")
             user.save()
-    context["user_list"] = User.objects.all()
+    context["user_list"] = User.objects.all().order_by("username")
     return render(request, 'userhub/user_list.html', context)
 
 def images_list(request):

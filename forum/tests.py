@@ -64,4 +64,8 @@ class TestSuite(TestCase):
         self.client.post('/topics/1/new/', {'content': "7"})
         response = self.client.post('/topics/1/squash/3/', follow=True)
         self.assertNotContains(response, "#3")
-        self.assertContains(response, "5<br />7")
+        self.assertContains(response, "5<br /><br />7")
+
+    def test_user_list_aggregates(self):
+        response = self.client.get('/user-list/')
+        self.assertContains(response, 1)

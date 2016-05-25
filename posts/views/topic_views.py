@@ -1,4 +1,4 @@
-from django.db.models import Max, F
+from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -20,7 +20,7 @@ def topics_new(request):
             content = request.POST.get("content", "")
             topic = Topic.objects.create(author=request.user, name=topic_name)
             topic.posts.create(author=request.user, content=content)
-            return HttpResponseRedirect('/topics/')
+            return HttpResponseRedirect(topic.get_absolute_url())
         else:
             context['error'] = "title must be at least 5 characters long"
     context['topic'] = {'name': request.POST.get("name", "")}

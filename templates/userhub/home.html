@@ -1,7 +1,4 @@
 {% extends 'base.html' %}
-{% block actions %}
-<a href="{% url 'user-list' %}">users</a>
-{% endblock %}
 {% block body %}
 <p>welcome, {{request.user}}!</p>
 {% with count=request.user.post_set.count %}

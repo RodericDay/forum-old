@@ -6,10 +6,11 @@
 {% block body %}
 {% for topic in topic_list %}
 <p>
-<span style="float: right;">{{topic.posts.last.created_at|naturaltime}}</span>
+<span class="badge" data-badge="1" style="float: right;">
+<a href="{{topic.get_absolute_url}}#latest">{{topic.posts.count}}</a>
+</span>
 {% spaceless %}
-<a href="{{topic.get_absolute_url}}">&lt;&lt;</a>
-<a href="{{topic.get_absolute_url}}#latest">{{topic.name}}</a>
+<a href="{{topic.get_absolute_url}}">{{topic.name}}</a>
 <a href="{{topic.get_absolute_url}}#latest">&gt;&gt;</a>
 <small>
 {{topic.author}}
@@ -17,7 +18,8 @@
 ({{topic.tags_as_string}})
 {% endif %}
 </small>
-{% endspaceless %}
+{% endspaceless %}<br>
+{{topic.posts.last.created_at|naturaltime}}
 </p>
 {% endfor %}
 </div>

@@ -7,9 +7,7 @@
 <form method="post">
 {% csrf_token %}
 <span style="color: red;">{{error}}</span>
-<p>
-<textarea name="content" rows="17" cols="45" autofocus>{{post.content}}</textarea>
-</p>
+<textarea name="content" autofocus>{{post.content}}</textarea>
 <input type="submit" value="Save" />
 </form>
 {% if post.id %}

@@ -9,6 +9,9 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='avatars', default='avatars/default.jpg')
     timezone = models.CharField(max_length=255, default="Canada/Eastern")
 
+    def last_post(self):
+        return self.user.post_set.last()
+
 
 User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
 
