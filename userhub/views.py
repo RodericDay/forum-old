@@ -75,6 +75,10 @@ def user_list_view(request):
             user.set_password("password")
             user.save()
     context["user_list"] = User.objects.all().order_by("username")
+    for user in context["user_list"]:
+        ts = [r.post.modified_at for r in user.record_set.all() if r.post_id]
+        if ts:
+            user.last_record = max(ts)
     return render(request, 'userhub/user_list.html', context)
 
 def images_list(request):
