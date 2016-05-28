@@ -69,3 +69,8 @@ class TestSuite(TestCase):
     def test_user_list_aggregates(self):
         response = self.client.get('/user-list/')
         self.assertContains(response, 1)
+
+    def test_seen(self):
+        self.client.get('/topics/1/')
+        response = self.client.get('/topics/')
+        self.assertContains(response, 'data-badge="0"')

@@ -2,13 +2,23 @@ from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from posts.models import Topic
+from posts.models import Topic, Record
 
 
 def topics_list(request):
     topics = Topic.objects.annotate(last_post=Max('posts__created_at'))
     ordered = topics.order_by('-last_post')
     visible = [topic for topic in ordered if topic.allows_access(request.user)]
+    records = {record.topic_id: record.post_id for record
+                in Record.objects.filter(user=request.user)}
+
+    for topic in visible:
+        topic.last_seen = 0
+        topic.unseen = 0
+        if topic.id in records:
+            topic.last_seen = records[topic.id]
+            topic.unseen = topic.posts.filter(id__gt=topic.last_seen).count()
+
     context = {'topic_list': visible}
     return render(request, 'posts/topic_list.html', context)
 
@@ -25,7 +35,7 @@ def topics_new(request):
             context['error'] = "title must be at least 5 characters long"
     context['topic'] = {'name': request.POST.get("name", "")}
     context['post'] = {'content': request.POST.get("content", "")}
-    return render(request, 'posts/topic_form.html', context)
+    return render(request, 'posts/topic_ form.html', context)
 
 def topics_delete(request):
     return HttpResponseRedirect("/")

@@ -52,3 +52,18 @@ class Topic(models.Model):
             if user in tag.access_list.all():
                 return False
         return True
+
+
+class Record(models.Model):
+    user = models.ForeignKey(User)
+    topic = models.ForeignKey(Topic)
+    post = models.ForeignKey(Post, null=True)
+
+    class Meta:
+        unique_together = ("user", "topic")
+
+    @classmethod
+    def new(cls, user, topic, post):
+        record, new = cls.objects.get_or_create(user=user, topic=topic)
+        record.post = post
+        record.save()

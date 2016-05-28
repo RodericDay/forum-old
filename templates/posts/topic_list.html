@@ -5,9 +5,9 @@
 {% endblock %}
 {% block body %}
 {% for topic in topic_list %}
-<p>
-<span class="badge" data-badge="1" style="float: right;">
-<a href="{{topic.get_absolute_url}}#latest">{{topic.posts.count}}</a>
+<div class="topic" id="topic.id">
+<span class="{% if topic.unseen %}badge{% endif %}" data-badge="{{topic.unseen}}" style="float: right;">
+<a href="{{topic.get_absolute_url}}#{{topic.last_seen}}">{{topic.posts.count}}</a>
 </span>
 {% spaceless %}
 <a href="{{topic.get_absolute_url}}">{{topic.name}}</a>
@@ -20,7 +20,6 @@
 </small>
 {% endspaceless %}<br>
 {{topic.posts.last.created_at|naturaltime}}
-</p>
-{% endfor %}
 </div>
+{% endfor %}
 {% endblock %}

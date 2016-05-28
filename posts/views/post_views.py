@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 
-from posts.models import Post, Topic, Tag
+from posts.models import Post, Topic, Tag, Record
 
 
 def posts_list(request, topic_id):
@@ -13,7 +13,9 @@ def posts_list(request, topic_id):
     if not topic.allows_access(request.user):
         return HttpResponseForbidden()
 
-    context = {"topic": topic, "post_list": topic.posts.all()}
+    posts = topic.posts.all()
+    Record.new(post=posts.last(), user=request.user, topic=topic)
+    context = {"topic": topic, "post_list": posts}
     # fallback in case quickpost attempted with js disabled
     if request.method == "POST":
         content = request.POST['content']
@@ -88,6 +90,7 @@ def posts_ajax(request, topic_id):
 def posts_squash(request, topic_id, post_id):
     topic = get_object_or_404(Topic, id=topic_id)
     all_posts = topic.posts.filter(id__lte=post_id).order_by("-created_at")
+    Record.new(post=all_posts.last(), user=request.user, topic=topic)
     tail_post, head_post = all_posts[:2]
     if head_post.author == tail_post.author:
         if request.user == head_post.author or request.user.is_superuser:
