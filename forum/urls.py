@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^topics/new/$', topics_new, name='topics-new'),
     url(r'^topics/(\d+)/delete/$', topics_delete, name='topics-delete'),
     url(r'^topics/(\d+)/tags/$', topic_tags_edit, name='topic-tags-edit'),
+    url(r'^topics/ajax/$', topics_ajax, name='topics-ajax'),
 
     url(r'^topics/(\d+)/$', posts_list, name='posts-list'),
     url(r'^topics/(\d+)/new/$', posts_new, name='posts-new'),

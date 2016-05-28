@@ -57,7 +57,7 @@ class Topic(models.Model):
 class Record(models.Model):
     user = models.ForeignKey(User)
     topic = models.ForeignKey(Topic)
-    post = models.ForeignKey(Post, null=True)
+    post = models.ForeignKey(Post, default=0)
 
     class Meta:
         unique_together = ("user", "topic")

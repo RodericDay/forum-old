@@ -1,6 +1,9 @@
+import json
+
 from django.db.models import Max
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.template.loader import render_to_string
 
 from posts.models import Topic, Record
 
@@ -35,10 +38,25 @@ def topics_new(request):
             context['error'] = "title must be at least 5 characters long"
     context['topic'] = {'name': request.POST.get("name", "")}
     context['post'] = {'content': request.POST.get("content", "")}
-    return render(request, 'posts/topic_ form.html', context)
+    return render(request, 'posts/topic_form.html', context)
 
 def topics_delete(request):
     return HttpResponseRedirect("/")
 
 def topics_ajax(request):
-    return HttpResponseRedirect("/")
+    if "ids" not in request.GET:
+        return HttpResponse("")
+
+    ids = [int(s) for s in request.GET["ids"].split(',')]
+
+    html_slugs = []
+    for record in Record.objects.filter(user=request.user, topic_id__in=ids):
+        topic = record.topic
+        if record.topic.allows_access(request.user):
+            topic.last_seen = record.post_id
+            topic.unseen = topic.posts.filter(id__gt=topic.last_seen).count()
+            html = render_to_string('posts/topic.html', {"topic": record.topic})
+            html_slugs.append({"id": record.topic_id, "html": html})
+
+    string = json.dumps(html_slugs)
+    return HttpResponse(string)

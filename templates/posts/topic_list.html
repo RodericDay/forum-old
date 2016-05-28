@@ -1,25 +1,10 @@
 {% extends 'base.html' %}
-{% load humanize %}
 {% block actions %}
 <a href="{% url 'topics-new' %}">new</a>
 {% endblock %}
 {% block body %}
 {% for topic in topic_list %}
-<div class="topic" id="topic.id">
-<span class="{% if topic.unseen %}badge{% endif %}" data-badge="{{topic.unseen}}" style="float: right;">
-<a href="{{topic.get_absolute_url}}#{{topic.last_seen}}">{{topic.posts.count}}</a>
-</span>
-{% spaceless %}
-<a href="{{topic.get_absolute_url}}">{{topic.name}}</a>
-<a href="{{topic.get_absolute_url}}#latest">&gt;&gt;</a>
-<small>
-{{topic.author}}
-{% if topic.tags.count %}
-({{topic.tags_as_string}})
-{% endif %}
-</small>
-{% endspaceless %}<br>
-{{topic.posts.last.created_at|naturaltime}}
-</div>
+{% include 'posts/topic.html' %}
 {% endfor %}
+{% include 'posts/topic_live.html' %}
 {% endblock %}

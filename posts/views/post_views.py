@@ -71,6 +71,18 @@ def posts_delete(request, post_id):
         url = post.get_absolute_url()
     return HttpResponseRedirect(url)
 
+def posts_squash(request, topic_id, post_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+    all_posts = topic.posts.filter(id__lte=post_id).order_by("-created_at")
+    tail_post, head_post = all_posts[:2]
+    if head_post.author == tail_post.author:
+        if request.user == head_post.author or request.user.is_superuser:
+            head_post.content += '\n\n' + tail_post.content
+            head_post.save()
+            tail_post.delete()
+    url = topic.get_absolute_url() + "#" + str(head_post.id)
+    return HttpResponseRedirect(url)
+
 def posts_ajax(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
     if not topic.allows_access(request.user):
@@ -82,20 +94,8 @@ def posts_ajax(request, topic_id):
             topic.posts.create(author=request.user, content=content)
     last = request.POST.get('timestamp', 0)
     modified = topic.posts.filter(modified_at__gt=last)
+    Record.new(user=request.user, topic=topic, post=modified.last())
     render = lambda post: render_to_string('posts/post.html', {'post': post})
     html_slugs = [{"id": post.id, "html": render(post)} for post in modified]
     string = json.dumps(html_slugs)
     return HttpResponse(string)
-
-def posts_squash(request, topic_id, post_id):
-    topic = get_object_or_404(Topic, id=topic_id)
-    all_posts = topic.posts.filter(id__lte=post_id).order_by("-created_at")
-    Record.new(post=all_posts.last(), user=request.user, topic=topic)
-    tail_post, head_post = all_posts[:2]
-    if head_post.author == tail_post.author:
-        if request.user == head_post.author or request.user.is_superuser:
-            head_post.content += '\n\n' + tail_post.content
-            head_post.save()
-            tail_post.delete()
-    url = topic.get_absolute_url() + "#" + str(head_post.id)
-    return HttpResponseRedirect(url)
