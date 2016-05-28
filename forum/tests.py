@@ -74,3 +74,7 @@ class TestSuite(TestCase):
         self.client.get('/topics/1/')
         response = self.client.get('/topics/')
         self.assertContains(response, 'data-badge="0"')
+
+    def test_tag_filter(self):
+        response = self.client.get('/topics/?tags=politics')
+        self.assertNotContains(response, 'Grothendieck Primes')

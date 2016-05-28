@@ -11,6 +11,8 @@ from posts.models import Topic, Record
 def topics_list(request):
     topics = Topic.objects.annotate(last_post=Max('posts__created_at'))
     ordered = topics.order_by('-last_post')
+    if 'tags' in request.GET:
+        ordered = ordered.filter(tags__name=request.GET['tags'])
     visible = [topic for topic in ordered if topic.allows_access(request.user)]
     records = {record.topic_id: record.post_id for record
                 in Record.objects.filter(user=request.user)}
