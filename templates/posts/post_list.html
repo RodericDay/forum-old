@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block title %}{{topic.name}}{% endblock %}
 {% block actions %}
 <a href="{% url 'posts-new' topic.id %}">reply</a>
 {% endblock %}
