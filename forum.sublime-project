@@ -11,7 +11,13 @@
 			"name": "Bash",
 			"selector": "source.shell",
 			"shell_cmd": "bash $file"
-		}
+		},
+		{
+			"name": "HTML File",
+			"selector": "text.html.basic",
+			"shell_cmd": "bash push_single_static.sh $file",
+			"working_dir": "${project_path}/bin",
+		},
 	],
 	"folders":
 	[

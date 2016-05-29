@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1">
-<title>forum.roderic.ca</title>
+<title>{% block title %}forum.roderic.ca{% endblock %}</title>
 <link rel="stylesheet" href="/static/spectre.min.css"/>
 <style>
 body { padding: 0px 3px; margin: 0px auto; max-width: 600px; }
 .avatar { float: right; }
 #quickpost { position: fixed; bottom: 0; }
-textarea { display: block; width: 22em; height: 8em; }
-code { font-family: monospace; }
-pre { overflow: auto; width: 95%; }
+textarea { display: block; width: 22em; height: 60vh; }
+header, footer { font-size: 80%; }
 spoiler { color: white; } /* should be same as background */
 </style>
 </head>

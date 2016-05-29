@@ -48,28 +48,23 @@ def posts_edit(request, post_id):
     if not post.allows_access(request.user):
         return HttpResponseForbidden()
 
-    context = {'action': 'edit', 'post': post}
     if request.method == "POST":
+        url = post.get_absolute_url()
+        if "delete" in request.POST:
+            post.content = "[deleted]"
+            post.save()
+            return HttpResponseRedirect(url)
+
         content = request.POST['content']
-        if content != '':
+        if content:
             post.content = request.POST['content']
             post.save()
-            url = post.get_absolute_url()
             return HttpResponseRedirect(url)
         else:
             context['error'] = "empty posts not allowed"
+
+    context = {'action': 'edit', 'post': post}
     return render(request, 'posts/post_form.html', context)
-
-def posts_delete(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    if not post.allows_access(request.user):
-        return HttpResponseForbidden()
-
-    if request.method == "POST":
-        post.content = "[deleted]"
-        post.save()
-        url = post.get_absolute_url()
-    return HttpResponseRedirect(url)
 
 def posts_squash(request, topic_id, post_id):
     topic = get_object_or_404(Topic, id=topic_id)

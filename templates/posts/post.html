@@ -11,5 +11,5 @@
 {% if forloop %} #{{forloop.counter}}{% endif %}
 <img class="avatar" src="/uploads/{{post.author.profile.avatar}}" width="40px"/>
 </small>
-<p>{{post.content|linebreaksbr|urlizetrunc:35|bleach}}</p>
+<p>{{post.content|linebreaksbr|bleach}}</p>
 </div>

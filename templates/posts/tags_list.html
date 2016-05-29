@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% block body %}
 <b>tag list</b>
-<p>
 {% for tag in tag_list %}
-<a href="{% url 'tags-edit' tag.name %}">{{tag.name}}</a><br />
+<div>
+<a href="{% url 'topics-list' %}?tags={{tag.name}}">{{tag.name}}</a>
+{% if request.user.is_superuser %}
+<small><a href="{% url 'tags-edit' tag.name %}">edit</a></small>
+{% endif %}
+</div>
 {% endfor %}
-</p>
 {% if request.user.is_superuser %}
 <form method="post">
 {% csrf_token %}

@@ -1,19 +1,50 @@
 {% extends 'base.html' %}
+{% load posts_tags %}
 {% block body %}
 <b>{{action}} post</b>
 {% if post.id %}
-{% include 'posts/post.html' %}
+<div id="htmlPreview">{{post.content|linebreaksbr|bleach}}</div>
 {% endif %}
+
+<div style="position: fixed; bottom: 0; left: 0;">
 <form method="post">
 {% csrf_token %}
 <span style="color: red;">{{error}}</span>
-<textarea name="content" autofocus>{{post.content}}</textarea>
-<input type="submit" value="Save" />
-</form>
+<textarea id="htmlInput" name="content" autofocus>{{post.content}}</textarea>
+<input type="submit" name="save" value="Save" />
 {% if post.id %}
-<form method="post" action="{% url 'posts-delete' post.id %}">
-{% csrf_token %}
-<input type="submit" value="Delete" />
+<input type="submit" name="delete" value="Delete" />
+{% endif %}
 </form>
+</div>
+
+{% if post.id %}
+<script>
+function goToHighlight() {
+    var selection = window.getSelection();
+    if (selection) {
+        var string = selection.toString();
+        if (string) {
+            var a = htmlInput.value.indexOf(string);
+            if (a > -1) {
+                b = a+string.length;
+                htmlInput.setSelectionRange(a, b);
+                htmlInput.focus();
+            }
+        }
+    }
+}
+htmlPreview.onmouseup = htmlPreview.ontouchend = goToHighlight;
+
+function savePagePosition() {
+    localStorage.setItem("pageYOffset", window.pageYOffset);
+}
+function restorePagePosition() {
+    var y = localStorage.getItem("pageYOffset");
+    window.scrollTo(0, y);
+}
+window.onunload = savePagePosition;
+restorePagePosition();
+</script>
 {% endif %}
 {% endblock %}

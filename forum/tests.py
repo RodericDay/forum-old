@@ -38,7 +38,7 @@ class TestSuite(TestCase):
         self.assertContains(response, "59")
 
     def test_delete_then_list(self):
-        response = self.client.post('/posts/1/delete/', follow=True)
+        response = self.client.post('/posts/1/edit/', {"delete": True}, follow=True)
         self.assertNotContains(response, "57")
         self.assertContains(response, "deleted")
 
@@ -50,9 +50,7 @@ class TestSuite(TestCase):
     def test_modifications_by_different_user(self):
         user = User.objects.create(username="Ludwig")
         self.client.force_login(user)
-        response = self.client.post('/posts/1/edit/', {'content': "lion"}, follow=True)
-        self.assertEquals(response.status_code, 403)
-        response = self.client.post('/posts/1/delete/', follow=True)
+        response = self.client.post('/posts/1/edit/', follow=True)
         self.assertEquals(response.status_code, 403)
 
     def test_post_bad_timezone(self):
