@@ -1,5 +1,5 @@
 {% load posts_tags %}
-<div id="{{post.id}}">
+<div class="post" id="{{post.id}}">
 <hr>
 <small>
 {{post.author}}
@@ -11,5 +11,5 @@
 {% if forloop %} #{{forloop.counter}}{% endif %}
 <img class="avatar" src="/uploads/{{post.author.profile.avatar}}" width="40px"/>
 </small>
-<p>{{post.content|linebreaksbr|bleach}}</p>
+<p class="breakable">{{post.content|linebreaksbr|bleach}}</p>
 </div>
