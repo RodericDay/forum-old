@@ -1,17 +1,23 @@
 {% load humanize %}
 <div class="topic" id="{{topic.id}}">
-<span class="{% if topic.unseen %}badge{% endif %}" data-badge="{{topic.unseen}}" style="float: right;">
-<a href="{{topic.get_absolute_url}}#{{topic.last_seen}}">{{topic.posts.count}}</a>
-</span>
-{% spaceless %}
-<a href="{{topic.get_absolute_url}}">{{topic.name}}</a>
-<a href="{{topic.get_absolute_url}}#latest">&gt;&gt;</a>
+
+<!-- notification -->
+<a href="{{topic.get_absolute_url}}#{{topic.last_seen}}">
+<span class="topic-status">{{topic.unseen}}</span>
+</a>
+
+<!--  main -->
+<a href="{{topic.get_absolute_url}}">
+{{topic.name}}
+<br>
 <small>
-{{topic.author}}
+by {{topic.author}}
+{{topic.posts.last.created_at|naturaltime}}
 {% if topic.tags.count %}
 ({{topic.tags_as_string}})
 {% endif %}
+・{{topic.posts.count}} post{{topic.posts.count|pluralize}}
 </small>
-{% endspaceless %}<br>
-{{topic.posts.last.created_at|naturaltime}}
+</a>
+
 </div>

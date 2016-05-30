@@ -4,14 +4,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1">
 <title>{% block title %}forum.roderic.ca{% endblock %}</title>
-<link rel="stylesheet" href="/static/spectre.min.css"/>
 <style>
-body { padding: 0px 3px; margin: 0px auto; max-width: 600px; }
+html { background-color: #fafafa; font-family: sans-serif; }
+body { padding: 0px 3px; margin: 0px auto; max-width: 600px; font-size: 16px; }
 .avatar { float: right; }
 #quickpost { position: fixed; bottom: 0; }
 textarea { display: block; width: 22em; height: 60vh; }
 header, footer { font-size: 80%; }
-spoiler { color: white; } /* should be same as background */
+pre { overflow: scroll; }
+article {
+    font-family: serif;
+    background-color: white;
+    padding: 1em 1em;
+    box-shadow: 0px 0px 10px #888888;
+    text-align: justify;
+}
+article a { color: red; }
+.spoiler { color: white; } /* should be same as background */
+.topic {
+    padding: 5px;
+    margin: 5px;
+}
+.topic a { text-decoration: none; }
+.topic-status {
+    float: right;
+    display: block;
+    text-align: center;
+}
 </style>
 </head>
 <body>
