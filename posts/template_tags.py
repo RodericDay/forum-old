@@ -10,7 +10,7 @@ def bleach(text):
     text = re.sub(r'&lt;img src=&quot;(.+?)&quot; ?/&gt;', r'<img src="\1"/>', text)
     #hyperlink
     text = re.sub(r'&lt;a href=&quot;(\S+?)&quot;&gt;(.+?)&lt;/a&gt;', r'<a href="\1">\2</a>', text)
-    text = re.sub(r'(\s|^)(\w+://\S+)(\s|$)', r'\1<a href="\2">\2</a>\3', text)
+    text = re.sub(r'(\s|>|^)(\w+://\S+?)(\s|<|$)', r'\1<a href="\2">\2</a>\3', text)
     #misc
     allowed = r'b|i|em|u|s|pre|code|spoiler|blockquote|article|header|footer|center|right|strong'
     pattern = r'&lt;(/)?({})&gt;'.format(allowed)
