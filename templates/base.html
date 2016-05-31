@@ -10,6 +10,7 @@ body { padding: 0px 3px; margin: 0px auto; max-width: 600px; font-size: 16px; }
 .avatar { float: right; }
 #quickpost { position: fixed; bottom: 0; }
 textarea { display: block; width: 22em; height: 60vh; }
+iframe { border: none; width: 22em; height: 60vh; }
 header, footer { font-size: 80%; }
 pre { overflow: scroll; }
 article {
@@ -45,7 +46,6 @@ article a { color: red; }
 <a href="{% url 'tags-list' %}">tags</a>
 <a href="{% url 'profile' %}">profile</a>
 {% if request.user.is_superuser %}
-<a href="{% url 'images-list' %}">images</a>
 <a href="{% url 'user-list' %}">users</a>
 {% endif %}
 </nav>

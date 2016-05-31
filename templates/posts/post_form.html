@@ -2,10 +2,13 @@
 {% load posts_tags %}
 {% block body %}
 <b>{{action}} post</b>
+
+<!-- center -->
 {% if post.id %}
 <div id="htmlPreview">{{post.content|linebreaksbr|bleach}}</div>
 {% endif %}
 
+<!-- left -->
 <div style="position: fixed; bottom: 0; left: 0;">
 <form method="post">
 {% csrf_token %}
@@ -16,6 +19,11 @@
 <input type="submit" name="delete" value="Delete" />
 {% endif %}
 </form>
+</div>
+
+<!-- right -->
+<div style="position: fixed; right: 0; bottom: 0;">
+<iframe src="/images/"></iframe>
 </div>
 
 {% if post.id %}

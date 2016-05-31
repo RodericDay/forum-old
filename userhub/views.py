@@ -82,10 +82,10 @@ def user_list_view(request):
     return render(request, 'userhub/user_list.html', context)
 
 def images_list(request):
+    imgs = Image.objects.order_by("-created_at")
     if not request.user.is_superuser:
-        return HttpResponseForbidden()
-
-    context = {'image_list': Image.objects.all()}
+        imgs = imgs.filter(uploader=request.user)
+    context = {'image_list': imgs}
     if request.method == "POST":
         raw = request.FILES.get("raw")
         if raw:
