@@ -3,7 +3,10 @@
 
 <!-- notification -->
 <a href="{{topic.get_absolute_url}}#{{topic.last_seen}}">
-<span class="topic-status">{{topic.unseen}}</span>
+<span class="topic-status">
+{{topic.unseen}} new<br>
+<small>{{topic.posts.count}} post{{topic.posts.count|pluralize}}</small>
+</span>
 </a>
 
 <!--  main -->
@@ -16,7 +19,6 @@ by {{topic.author}}
 {% if topic.tags.count %}
 ({{topic.tags_as_string}})
 {% endif %}
-・{{topic.posts.count}} post{{topic.posts.count|pluralize}}
 </small>
 </a>
 

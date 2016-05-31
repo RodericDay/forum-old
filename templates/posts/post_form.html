@@ -42,7 +42,7 @@ function goToHighlight() {
         }
     }
 }
-htmlPreview.onmouseup = htmlPreview.ontouchend = goToHighlight;
+htmlPreview.onmouseup = goToHighlight;
 
 function savePagePosition() {
     localStorage.setItem("pageYOffset", window.pageYOffset);
