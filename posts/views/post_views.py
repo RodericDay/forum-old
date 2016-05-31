@@ -89,7 +89,8 @@ def posts_ajax(request, topic_id):
             topic.posts.create(author=request.user, content=content)
     last = request.POST.get('timestamp', 0)
     modified = topic.posts.filter(modified_at__gt=last)
-    Record.new(user=request.user, topic=topic, post=modified.last())
+    if modified:
+        Record.new(user=request.user, topic=topic, post=modified.last())
     render = lambda post: render_to_string('posts/post.html', {'post': post})
     html_slugs = [{"id": post.id, "html": render(post)} for post in modified]
     string = json.dumps(html_slugs)
