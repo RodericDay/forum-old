@@ -42,11 +42,6 @@ class TestSuite(TestCase):
         self.assertNotContains(response, "57")
         self.assertContains(response, "deleted")
 
-    def test_bleach(self):
-        self.assertEquals('</spoiler>', bleach('&lt;/spoiler&gt;'))
-        self.assertEquals('<img src="http://u.rl"/>',
-                    bleach('&lt;img src=&quot;http://u.rl&quot;/&gt;'))
-
     def test_modifications_by_different_user(self):
         user = User.objects.create(username="Ludwig")
         self.client.force_login(user)
