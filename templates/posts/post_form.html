@@ -1,29 +1,44 @@
 {% extends 'base.html' %}
 {% load posts_tags %}
 {% block body %}
+<style>
+input[name=tab] { display: none; }
+input[name=tab]:checked + label { text-decoration: underline; }
+input[name=delete] { position: absolute; bottom: 0; right: 0;}
+.tabbed > div { display: none; height: 100px; width: 300px; }
+#tab1:checked ~ #htmlForm { display: block; }
+#tab2:checked ~ #imgForm { display: block; }
+#tab3:checked ~ #deleteForm { display: block; }
+</style>
 <b>{{action}} post</b>
 
-<!-- center -->
-{% if post.id %}
 <div id="htmlPreview">{{post.content|linebreaksbr|bleach}}</div>
-{% endif %}
 
-<!-- left -->
-<div style="position: fixed; bottom: 0; left: 0;">
+<div id="htmlEditor" class="tabbed">
+<input name="tab" type="radio" id="tab1" checked><label for="tab1">html</label>
+<input name="tab" type="radio" id="tab2"><label for="tab2">img</label>
+<input name="tab" type="radio" id="tab3"><label for="tab3">delete</label>
+<!-- 1 -->
+<div id="htmlForm">
 <form method="post">
 {% csrf_token %}
-<span style="color: red;">{{error}}</span>
+<span class="error">{{error}}</span>
 <textarea id="htmlInput" name="content" autofocus>{{post.content}}</textarea>
 <input type="submit" name="save" value="Save" />
-{% if post.id %}
-<input type="submit" name="delete" value="Delete" />
-{% endif %}
 </form>
 </div>
-
-<!-- right -->
-<div style="position: fixed; right: 0; bottom: 0;">
-<iframe src="/images/"></iframe>
+<!-- 2 -->
+<div id="imgForm" class="scroll-wrapper">
+<iframe height="100%" src="/images/"></iframe>
+</div>
+<!-- 3 -->
+<div id="deleteForm">
+<form method="post">
+{% csrf_token %}
+<input type="submit" name="delete" value="Delete" />
+</form>
+</div>
+<!-- - -->
 </div>
 
 {% if post.id %}

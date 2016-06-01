@@ -7,10 +7,8 @@
 <style>
 html { background-color: #fafafa; font-family: sans-serif; }
 body { padding: 0px 3px; margin: 0px auto; max-width: 600px; font-size: 16px; }
-.avatar { float: right; }
-#quickpost { position: fixed; bottom: 0; }
 textarea { display: block; width: 22em; height: 60vh; }
-iframe { border: none; width: 22em; height: 60vh; }
+iframe { border: none; background-color: #eee; }
 header, footer { font-size: 80%; }
 pre { overflow: scroll; }
 article {
@@ -21,6 +19,8 @@ article {
     text-align: justify;
 }
 article a { color: red; }
+.avatar { float: right; }
+#quickpost { position: fixed; bottom: 0; }
 .spoiler { color: white; } /* should be same as background */
 .topic {
     padding: 5px;
@@ -35,6 +35,13 @@ article a { color: red; }
 .breakable {
     overflow-wrap: break-word;
 }
+.scroll-wrapper {
+    height: 100px;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;"
+}
+#htmlInput { height: 6em; }
+#htmlEditor { position: fixed; bottom: 0; }
 </style>
 </head>
 <body>

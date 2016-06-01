@@ -10,7 +10,7 @@
 <small><small>
 &lt;img src="https://forum.roderic.ca/uploads/{{image.raw}}"/&gt;
 </small></small>
-{% if request.user.is_superuser %}
+{% if false and request.user.is_superuser %}
 <form method="post" action="{% url 'images-delete' image.id %}">
 {% csrf_token %}
 <input type="submit" value="Delete" />
