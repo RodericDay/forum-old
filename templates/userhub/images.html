@@ -1,15 +1,17 @@
 {% block body %}
-<form method="post" enctype="multipart/form-data">
+<style>
+html, body { white-space: nowrap; }
+</style>
+
+<form id="new" method="post" enctype="multipart/form-data">
 {% csrf_token %}
 <input type="file" name="raw" />
 <input type="submit" value="Upload" />
 </form>
 
 {% for image in image_list %}
-<img src="/uploads/{{image.thumbnail}}" width="150" /><br>
-<small><small>
-&lt;img src="https://forum.roderic.ca/uploads/{{image.raw}}"/&gt;
-</small></small>
+<img src="/uploads/{{image.thumbnail}}" height="40" />
+<!-- &lt;img src="https://forum.roderic.ca/uploads/{{image.raw}}"/&gt; -->
 {% if false and request.user.is_superuser %}
 <form method="post" action="{% url 'images-delete' image.id %}">
 {% csrf_token %}
