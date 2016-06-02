@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load posts_tags %}
+{% block title %}{{action}} post #{{post.id}}{% endblock %}
 {% block body %}
 <style>
 input[name=tab] { display: none; }
@@ -10,9 +11,13 @@ input[name=delete] { position: absolute; bottom: 0; right: 0;}
 #tab2:checked ~ #imgForm { display: block; }
 #tab3:checked ~ #deleteForm { display: block; }
 </style>
-<b>{{action}} post</b>
 
-<div id="htmlPreview">{{post.content|linebreaksbr|bleach}}</div>
+<div id="htmlPreview">
+<ul>{% for topic in post.topic_set.all %}
+<li><a href="{{topic.get_absolute_url}}#{{post.id}}">{{topic.name}}</a><br></li>
+{% endfor %}</ul>
+{% include 'posts/post.html' %}
+</div>
 
 <div id="htmlEditor" class="tabbed">
 <input name="tab" type="radio" id="tab0"><label for="tab0">hide</label>

@@ -3,14 +3,20 @@
 html, body { white-space: nowrap; }
 </style>
 
-<form id="new" method="post" enctype="multipart/form-data">
+<form id="new" method="post" enctype="multipart/form-data" hidden>
 {% csrf_token %}
-<input type="file" name="raw" />
-<input type="submit" value="Upload" />
+<input id="realUploadButton" type="file" name="raw" hidden/>
+<input id="submitButton" type="submit" value="Upload" />
 </form>
 
+<svg width="40" height="40" id="uploadButton">
+<rect width="40" height="40" style="fill: #ddd;" />
+<rect x="17" y="7" width="6" height="26" style="fill: #aaa;" />
+<rect x="7" y="17" width="26" height="6" style="fill: #aaa;" />
+</svg>
+
 {% for image in image_list %}
-<img src="/uploads/{{image.thumbnail}}" height="40" />
+<img src="/uploads/{{image.thumbnail}}" height="40" onclick="copyTag(this)"/>
 <!-- &lt;img src="https://forum.roderic.ca/uploads/{{image.raw}}"/&gt; -->
 {% if false and request.user.is_superuser %}
 <form method="post" action="{% url 'images-delete' image.id %}">
@@ -19,4 +25,13 @@ html, body { white-space: nowrap; }
 </form>
 {% endif %}
 {% endfor %}
+
+<script>
+function copyTag(img) {
+    var realSrc = img.src.replace(/thumbnails/, 'images');
+    window.prompt("Copy and paste this link:", '<img src="'+realSrc+'"/>');
+}
+realUploadButton.onchange = function() { submitButton.click() }
+uploadButton.onclick = function() { realUploadButton.click() }
+</script>
 {% endblock %}

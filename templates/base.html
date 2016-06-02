@@ -20,7 +20,6 @@ article {
 }
 article a { color: red; }
 .avatar { float: right; }
-#quickpost { position: fixed; bottom: 0; }
 .spoiler { color: white; } /* should be same as background */
 .topic {
     padding: 5px;
@@ -40,8 +39,10 @@ article a { color: red; }
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;"
 }
+#quickpost { position: fixed; bottom: 0; }
 #htmlInput { height: 6em; }
-#htmlEditor { position: fixed; bottom: 0; }
+#htmlPreview {}
+#htmlEditor { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #bbb; }
 </style>
 </head>
 <body>
