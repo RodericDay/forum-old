@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
 {% block title %}{{topic.name}}{% endblock %}
-{% block actions %}
-<a href="{% url 'posts-new' topic.id %}">reply</a>
-{% endblock %}
 {% block body %}
 <b>{{topic.name}}</b>
 {% include 'posts/topic_tag_form.html' %}
@@ -14,5 +11,6 @@ No posts.
 {% endfor %}
 </div>
 <div id="latest" style="color: transparent;">{% now 'Y-m-d H:i:sO' %}</div>
+{% include 'posts/post_editor.html' %}
 {% include 'posts/post_live.html' %}
 {% endblock %}

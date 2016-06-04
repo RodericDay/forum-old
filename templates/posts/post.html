@@ -1,5 +1,5 @@
 {% load posts_tags %}
-<div class="post" id="{{post.id}}">
+<div class="post" id="{{post.id}}" data-raw="{{post.content|b64encode}}">
 <hr>
 <small>
 {{post.author}}

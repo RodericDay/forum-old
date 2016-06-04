@@ -1,8 +1,3 @@
-<form id="quickpost" method="post" onsubmit="return query(true)" action="#latest">
-{% csrf_token %}
-<input name="content" autocomplete="off" />
-<input type="submit" value="Quickpost" />
-</form>
 <script>
 function createOrUpdate(slug) {
     var existing = document.getElementById(slug.id);
@@ -26,11 +21,11 @@ function load() {
 }
 function query(isSubmission) {
     var payload = "topic={{topic.id}}"
-    payload += "&csrfmiddlewaretoken="+quickpost.csrfmiddlewaretoken.value;
+    payload += "&csrfmiddlewaretoken="+quick.csrfmiddlewaretoken.value;
     payload += "&timestamp="+latest.innerHTML;
     if (isSubmission) {
-        payload += "&content="+quickpost.content.value;
-        quickpost.content.value = '';
+        payload += "&content="+quick.content.value;
+        quick.content.value = '';
     }
     var xhr = new XMLHttpRequest();
     xhr.open("post", "{% url 'posts-ajax' topic.id %}", true);

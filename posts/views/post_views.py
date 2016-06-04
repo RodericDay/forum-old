@@ -48,6 +48,7 @@ def posts_edit(request, post_id):
     if not post.allows_access(request.user):
         return HttpResponseForbidden()
 
+    context = {'action': 'edit', 'post': post}
     if request.method == "POST":
         url = post.get_absolute_url()
         if "delete" in request.POST:
@@ -63,7 +64,6 @@ def posts_edit(request, post_id):
         else:
             context['error'] = "empty posts not allowed"
 
-    context = {'action': 'edit', 'post': post}
     return render(request, 'posts/post_form.html', context)
 
 def posts_squash(request, topic_id, post_id):

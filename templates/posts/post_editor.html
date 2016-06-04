@@ -1,0 +1,91 @@
+<style>
+#htmlEditor { position: fixed; bottom: 0; left: 0; }
+.tabbed > div { display: none; width: 300px; }
+#tab0:checked ~ #quickForm { display: block; }
+#tab1:checked ~ #htmlForm { display: block; }
+#tab2:checked ~ #imgForm { display: block; }
+/* 1 */
+#htmlInput { height: 6em; }
+/* 2 */
+.scroll-wrapper {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;"
+} /* ios scrolling fix */
+iframe { border: none; background-color: #eee; height: 100px; }
+/* 3 */
+input[name=delete] { position: absolute; bottom: 0; right: 0; }
+</style>
+
+<div id="htmlEditor" class="tabbed">
+<!-- tabs -->
+<input name="tab" type="radio" id="tab0" checked/><label for="tab0">quick</label>
+<input name="tab" type="radio" id="tab1"/><label for="tab1">html</label>
+<input name="tab" type="radio" id="tab2"/><label for="tab2">img</label>
+<!-- 0 -->
+<div id="quickForm">
+<form id="quick" method="post" onsubmit="return query(true)" action="#latest">
+{% csrf_token %}
+<input name="content" autocomplete="off" />
+<input type="submit" value="Quickpost" />
+</form>
+</div>
+<!-- 1 -->
+<div id="htmlForm">
+<form method="post">
+{% csrf_token %}
+<span class="error">{{error}}</span>
+<textarea id="htmlInput" name="content" autofocus>{{post.content}}</textarea>
+<input type="submit" name="save" value="Save" />
+<span id="htmlEditorTarget"></span>
+</form>
+</div>
+<!-- 2 -->
+<div id="imgForm" class="scroll-wrapper">
+<iframe height="100%" src="/images/"></iframe>
+</div>
+<!-- 3 -->
+<div id="deleteForm">
+<form method="post">
+{% csrf_token %}
+<input type="submit" name="delete" value="Delete" />
+</form>
+</div>
+<!-- - -->
+</div>
+
+<script>
+// allows selection of posts -- should be double-click/tap
+var firstTap = true;
+function selectPost() {
+    if (firstTap) {
+        firstTap = false;
+        window.setTimeout(function(){firstTap = true;}, 500);
+        return
+    }
+    var prompt = this.id !== htmlEditorTarget.textContent;
+    if (prompt && !window.confirm("Discard changes and edit #"+this.id+"?")) {
+        return
+    }
+    tab1.checked = true;
+    htmlEditorTarget.textContent = this.id;
+    htmlForm.querySelector("form").action = "/posts/" + this.id + "/edit/";
+    htmlInput.value = atob(this.dataset.raw);
+}
+var posts = [].slice.apply(document.getElementsByClassName("post"));
+posts.forEach(function(post){post.onclick = selectPost});
+// allows automatic zooming into relevant area
+function goToHighlight() {
+    var selection = window.getSelection();
+    if (!selection) { return }
+    var string = selection.toString();
+    if (!string) { return }
+    var a = htmlInput.value.indexOf(string);
+    if (a === -1) { return }
+    b = a+string.length;
+    tab1.checked = true;
+    htmlInput.setSelectionRange(a, b);
+    htmlInput.focus();
+}
+window.onmouseup = goToHighlight;
+</script>

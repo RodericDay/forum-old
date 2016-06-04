@@ -2,69 +2,17 @@
 {% load posts_tags %}
 {% block title %}{{action}} post #{{post.id}}{% endblock %}
 {% block body %}
-<style>
-input[name=tab] { display: none; }
-input[name=tab]:checked + label { text-decoration: underline; }
-input[name=delete] { position: absolute; bottom: 0; right: 0;}
-.tabbed > div { display: none; height: 100px; width: 300px; }
-#tab1:checked ~ #htmlForm { display: block; }
-#tab2:checked ~ #imgForm { display: block; }
-#tab3:checked ~ #deleteForm { display: block; }
-</style>
-
 <div id="htmlPreview">
-<ul>{% for topic in post.topic_set.all %}
-<li><a href="{{topic.get_absolute_url}}#{{post.id}}">{{topic.name}}</a><br></li>
+{% for topic in post.topic_set.all %}
+{% include 'posts/topic.html' %}
 {% endfor %}</ul>
 {% include 'posts/post.html' %}
 </div>
 
-<div id="htmlEditor" class="tabbed">
-<input name="tab" type="radio" id="tab0"><label for="tab0">hide</label>
-<input name="tab" type="radio" id="tab1" checked><label for="tab1">html</label>
-<input name="tab" type="radio" id="tab2"><label for="tab2">img</label>
-<input name="tab" type="radio" id="tab3"><label for="tab3">delete</label>
-<!-- 1 -->
-<div id="htmlForm">
-<form method="post">
-{% csrf_token %}
-<span class="error">{{error}}</span>
-<textarea id="htmlInput" name="content" autofocus>{{post.content}}</textarea>
-<input type="submit" name="save" value="Save" />
-</form>
-</div>
-<!-- 2 -->
-<div id="imgForm" class="scroll-wrapper">
-<iframe height="100%" src="/images/"></iframe>
-</div>
-<!-- 3 -->
-<div id="deleteForm">
-<form method="post">
-{% csrf_token %}
-<input type="submit" name="delete" value="Delete" />
-</form>
-</div>
-<!-- - -->
-</div>
+{% include 'posts/post_editor.html' %}
 
 {% if post.id %}
 <script>
-function goToHighlight() {
-    var selection = window.getSelection();
-    if (selection) {
-        var string = selection.toString();
-        if (string) {
-            var a = htmlInput.value.indexOf(string);
-            if (a > -1) {
-                b = a+string.length;
-                htmlInput.setSelectionRange(a, b);
-                htmlInput.focus();
-            }
-        }
-    }
-}
-htmlPreview.onmouseup = goToHighlight;
-
 function savePagePosition() {
     localStorage.setItem("pageYOffset", window.pageYOffset);
 }
@@ -74,6 +22,8 @@ function restorePagePosition() {
 }
 window.onunload = savePagePosition;
 restorePagePosition();
+tab1.checked = true;
 </script>
 {% endif %}
+
 {% endblock %}

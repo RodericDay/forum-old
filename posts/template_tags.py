@@ -1,4 +1,5 @@
 import re, itertools
+import base64
 from django import template
 
 register = template.Library()
@@ -26,3 +27,7 @@ def bleach(text):
         bleached = bleached.replace(pattern, intext, 1)
         bleached = bleached.replace(pattern, infoot, 1)
     return bleached
+
+@register.filter(is_safe=True)
+def b64encode(text):
+    return base64.b64encode(bytes(text, "utf-8"))
