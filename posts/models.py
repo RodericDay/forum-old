@@ -42,7 +42,7 @@ class Topic(models.Model):
         return reverse('posts-list', args=[self.id])
 
     def tags_as_string(self):
-        return ", ".join(tag.name for tag in self.tags.all())
+        return " ".join(tag.name for tag in self.tags.all())
 
     def allows_access(self, user):
         for tag in self.tags.all().filter(access_mode=1): # whitelist
