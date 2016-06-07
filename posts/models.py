@@ -65,5 +65,6 @@ class Record(models.Model):
     @classmethod
     def new(cls, user, topic, post):
         record, new = cls.objects.get_or_create(user=user, topic=topic)
-        record.post = post
-        record.save()
+        if new or post.id > record.post.id:
+            record.post = post
+            record.save()

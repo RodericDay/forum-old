@@ -4,6 +4,8 @@ from PIL import Image as PImage
 from django.contrib.auth.models import User
 from django.db import models
 
+from forum.settings import STATIC_ROOT
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
@@ -27,7 +29,11 @@ class Image(models.Model):
         o_path = self.raw.path
         t_path = o_path.replace('images', 'thumbnails', 1)
         if not os.path.isfile(t_path):
-            original = PImage.open(o_path)
+            try:
+                original = PImage.open(o_path)
+            except:
+                default = os.path.join(STATIC_ROOT, 'document.png')
+                original = PImage.open(default)
             r = min(300/max(original.width, original.height), 1)
             s = (int(r*original.width), int(r*original.height))
             thumbnail = original.resize(s)

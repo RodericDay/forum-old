@@ -1,3 +1,4 @@
 set -e
-python ../manage.py makemigrations
-python ../manage.py test
+cd ..
+python manage.py makemigrations
+python manage.py test
