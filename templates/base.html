@@ -56,4 +56,9 @@ article a { color: red; }
 This is the base template. Add a body block!
 {% endblock %}
 </body>
+{% if user.is_superuser %}
+<ol>{% for query in sql %}
+<li>{{query.sql}}</li>
+{% endfor %}</ol>
+{% endif %}
 </html>

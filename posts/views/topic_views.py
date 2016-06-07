@@ -1,5 +1,6 @@
 import json
 
+from django.db import connection
 from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -24,7 +25,7 @@ def topics_list(request):
             topic.last_seen = records[topic.id]
             topic.unseen = topic.posts.filter(id__gt=topic.last_seen).count()
 
-    context = {'topic_list': visible}
+    context = {'topic_list': visible, 'sql': connection.queries}
     return render(request, 'posts/topic_list.html', context)
 
 def topics_new(request):
