@@ -32,6 +32,9 @@ input[name=delete] { position: absolute; bottom: 0; right: 0; }
 </div>
 <!-- 1 -->
 <div id="htmlForm">
+<input id="r1" size="10" />
+<input id="r2" size="10" />
+<button onclick="clean()">Regex</button>
 <form method="post">
 {% csrf_token %}
 <span class="error">{{error}}</span>
@@ -55,6 +58,12 @@ input[name=delete] { position: absolute; bottom: 0; right: 0; }
 </div>
 
 <script>
+// clean content of html box
+function clean() {
+    var re = new RegExp(r1.value, "g");
+    htmlInput.value = htmlInput.value.replace(re, r2.value);
+    alert("done");
+}
 // allows selection of posts -- should be double-click/tap
 var firstTap = true;
 function selectPost() {
