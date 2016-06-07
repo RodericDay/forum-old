@@ -1,8 +1,10 @@
 import os
+from datetime import timedelta
 from PIL import Image as PImage
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone as tz
 
 from forum.settings import STATIC_ROOT
 
@@ -11,9 +13,11 @@ class Profile(models.Model):
     user = models.OneToOneField(User)
     avatar = models.ImageField(upload_to='avatars', default='avatars/default.jpg')
     timezone = models.CharField(max_length=255, default="Canada/Eastern")
+    last_active = models.DateTimeField(default=tz.now)
 
-    def last_post(self):
-        return self.user.post_set.last()
+    @property
+    def is_online(self):
+        return (tz.now() - self.last_active) < timedelta(minutes=1)
 
 
 User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])

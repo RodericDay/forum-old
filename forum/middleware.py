@@ -19,5 +19,8 @@ class TimezoneMiddleware(object):
         if request.user.is_authenticated():
             tz = pytz.timezone(request.user.profile.timezone)
             timezone.activate(tz)
+            profile = request.user.profile
+            profile.last_active = timezone.now()
+            profile.save()
         else:
             timezone.deactivate()

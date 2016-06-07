@@ -3,6 +3,7 @@
 <hr>
 <small>
 {{post.author}}
+{% if post.author.profile.is_online %}<span class="online-indicator">●</span>{% endif %}
 {{post.created_at}}
 <a href="{% url 'posts-edit' post.id %}">detail</a>
 {% if topic and request.user.is_superuser %}

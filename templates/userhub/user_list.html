@@ -4,12 +4,12 @@
 <table>
 <tr>
 <th>User</th>
-<th>Last Record</th>
+<th>Last Active</th>
 </tr>
 {% for user in user_list %}
 <tr>
 <td>{{user.get_username}}</td>
-<td>{{user.last_record|naturaltime}}</td>
+<td>{{user.profile.last_active|naturaltime}}</td>
 </tr>
 {% endfor %}
 </table>

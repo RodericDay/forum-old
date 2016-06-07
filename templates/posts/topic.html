@@ -15,7 +15,8 @@
 <br>
 <small>
 by {{topic.author}}
-{{topic.posts.last.created_at|naturaltime}}
+{% if topic.author.profile.is_online %}<span class="online-indicator">●</span>{% endif %}
+| last post {{topic.posts.last.created_at|naturaltime}}
 <i>{{topic.tags_as_string}}</i>
 </small>
 </a>
