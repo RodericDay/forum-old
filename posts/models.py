@@ -53,6 +53,9 @@ class Topic(models.Model):
                 return False
         return True
 
+    def __str__(self):
+        return self.name
+
 
 class Record(models.Model):
     user = models.ForeignKey(User)
