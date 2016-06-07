@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 from posts.models import Post, Topic, Tag, Record
 
@@ -83,10 +84,16 @@ def posts_ajax(request, topic_id):
     if not topic.allows_access(request.user):
         return HttpResponseForbidden()
 
+    tail = topic.posts.last()
     if request.method == "POST" and "content" in request.POST:
         content = request.POST['content']
         if content != '':
-            topic.posts.create(author=request.user, content=content)
+            if tail.author == request.user:
+                tail.content += '\n\n' + content
+                tail.created_at = timezone.now()
+                tail.save()
+            else:
+                topic.posts.create(author=request.user, content=content)
     last = request.POST.get('timestamp', 0)
     modified = topic.posts.filter(modified_at__gt=last)
     if modified:
