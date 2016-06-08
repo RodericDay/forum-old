@@ -1,15 +1,15 @@
 {% load humanize %}
 <div class="topic {{topic.tags_as_string}}" id="{{topic.id}}">
 
-<!-- notification -->
-<a href="{{topic.get_absolute_url}}#{{topic.last_seen}}">
+{% spaceless %}
+<a href="{{topic.get_absolute_url}}#latest">
 <span class="topic-status">
 <div>{{topic.unseen}} new</div>
 <small>{{topic.posts.count}} post{{topic.posts.count|pluralize}}</small>
 </span>
 </a>
+{% endspaceless %}
 
-<!--  main -->
 <a href="{{topic.get_absolute_url}}">
 {{topic.name}}
 <br>

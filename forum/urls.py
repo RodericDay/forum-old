@@ -15,10 +15,11 @@ urlpatterns = [
     url(r'^topics/ajax/$', topics_ajax, name='topics-ajax'),
 
     url(r'^topics/(\d+)/$', posts_list, name='posts-list'),
-    url(r'^topics/(\d+)/new/$', posts_new, name='posts-new'),
-    url(r'^posts/(\d+)/edit/$', posts_edit, name='posts-edit'),
+    url(r'^topics/(\d+)/reply/$', posts_reply, name='posts-reply'),
     url(r'^topics/(\d+)/ajax/$', posts_ajax, name='posts-ajax'),
     url(r'^topics/(\d+)/squash/(\d+)/$', posts_squash, name='posts-squash'),
+
+    url(r'^posts/(\d+)/edit/$', posts_edit, name='posts-edit'),
 
     url(r'^tags/$', tags_list, name='tags-list'),
     url(r'^tags/(.+)/$', tags_edit, name='tags-edit'),

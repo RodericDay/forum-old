@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load posts_tags %}
+
+{% block title %}{{action}} post #{{post.id}}{% endblock %}
+
+{% block body %}
+<ul>{% for topic in post.topic_set.all %}
+{% include 'posts/topic.html' %}
+{% endfor %}</ul>
+
+<div id="htmlPreview">
+{% include 'posts/post.html' %}
+</div>
+
+<div id="sidebar">
+<input id="r1" size="10" />
+<input id="r2" size="10" />
+<button onclick="clean()">Regex</button>
+<form method="post">
+{% csrf_token %}
+<span class="error">{{error}}</span>
+<textarea id="htmlInput" name="content" autofocus>{{post.content}}</textarea>
+<input type="submit" name="save" value="Save" />
+<span id="htmlEditorTarget"></span>
+</form>
+</div>
+
+<div class="iframe-scroll-wrapper">
+<iframe src="/images/"></iframe>
+</div>
+
+{% if post.id %}
+<script>
+// regex helper
+function clean() {
+    var re = new RegExp(r1.value, "g");
+    htmlInput.value = htmlInput.value.replace(re, r2.value);
+    alert("done");
+}
+// automatic zooming into relevant area for editing
+function goToHighlight() {
+    var selection = window.getSelection();
+    if (!selection) { return }
+    var string = selection.toString();
+    if (!string) { return }
+    var a = htmlInput.value.indexOf(string);
+    if (a === -1) { return }
+    b = a+string.length;
+    htmlInput.setSelectionRange(a, b);
+    htmlInput.focus();
+}
+window.onmouseup = goToHighlight;
+// auto-restore page position
+function savePagePosition() {
+    localStorage.setItem("pageYOffset", window.pageYOffset);
+}
+function restorePagePosition() {
+    var y = localStorage.getItem("pageYOffset");
+    window.scrollTo(0, y);
+}
+window.onunload = savePagePosition;
+restorePagePosition();
+</script>
+{% endif %}
+{% endblock %}

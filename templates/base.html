@@ -7,10 +7,11 @@
 <title>{% block title %}forum.roderic.ca{% endblock %}</title>
 <style>
 html { background-color: #fafafa; font-family: sans-serif; }
-body { padding: 0px 3px; margin: 0px auto; max-width: 600px; font-size: 16px; }
+body { padding: 0px 3px; margin: 0px auto; max-width: 40em; font-size: 16px; }
 textarea { display: block; width: 22em; height: 60vh; }
 header, footer { font-size: 80%; }
-pre { overflow: scroll; }
+pre { overflow-x: scroll; }
+iframe { border: none; height: 100%; width: 100%; }
 article {
     font-family: serif;
     background-color: white;
@@ -35,8 +36,18 @@ article a { color: red; }
 .breakable {
     overflow-wrap: break-word;
 }
-#quickpost { position: fixed; bottom: 0; }
 .online-indicator { color: #4b4; }
+.iframe-scroll-wrapper {
+    position: fixed;
+    height: 100%;
+    width: 100px;
+    top: 0;
+    right: 0;
+    /* ios scrolling fix */
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;"
+}
+#sidebar { position: fixed; bottom: 0; left: 0; }
 </style>
 </head>
 <body>
@@ -56,9 +67,4 @@ article a { color: red; }
 This is the base template. Add a body block!
 {% endblock %}
 </body>
-{% if user.is_superuser %}
-<ol>{% for query in sql %}
-<li>{{query.sql}}</li>
-{% endfor %}</ol>
-{% endif %}
 </html>

@@ -17,32 +17,20 @@ def posts_list(request, topic_id):
     posts = topic.posts.all()
     Record.new(post=posts.last(), user=request.user, topic=topic)
     context = {"topic": topic, "post_list": posts}
-    # fallback in case quickpost attempted with js disabled
-    if request.method == "POST":
-        content = request.POST['content']
-        if content != '':
-            post = topic.posts.create(author=request.user, content=content)
-            url = topic.get_absolute_url() + "#" + str(post.id)
-            return HttpResponseRedirect(url)
-        else:
-            context['error'] = "empty posts not allowed"
+
     return render(request, 'posts/post_list.html', context)
 
-def posts_new(request, topic_id):
+def posts_reply(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
     if not topic.allows_access(request.user):
         return HttpResponseForbidden()
 
-    context = {'action': 'new'}
     if request.method == "POST":
-        content = request.POST['content']
-        if content != '':
-            post = topic.posts.create(author=request.user, content=content)
-            url = topic.get_absolute_url() + "#" + str(post.id)
-            return HttpResponseRedirect(url)
-        else:
-            context['error'] = "empty posts not allowed"
-    return render(request, 'posts/post_form.html', context)
+        post = topic.posts.create(author=request.user, content=request.POST['content'])
+        url = topic.get_absolute_url() + "#" + str(post.id)
+        return HttpResponseRedirect(url)
+
+    return render(request, 'posts/post_detail.html')
 
 def posts_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -57,15 +45,11 @@ def posts_edit(request, post_id):
             post.save()
             return HttpResponseRedirect(url)
 
-        content = request.POST['content']
-        if content:
-            post.content = request.POST['content']
-            post.save()
-            return HttpResponseRedirect(url)
-        else:
-            context['error'] = "empty posts not allowed"
+        post.content = request.POST['content']
+        post.save()
+        return HttpResponseRedirect(url)
 
-    return render(request, 'posts/post_form.html', context)
+    return render(request, 'posts/post_detail.html', context)
 
 def posts_squash(request, topic_id, post_id):
     topic = get_object_or_404(Topic, id=topic_id)
@@ -94,6 +78,7 @@ def posts_ajax(request, topic_id):
                 tail.save()
             else:
                 topic.posts.create(author=request.user, content=content)
+
     last = request.POST.get('timestamp', 0)
     modified = topic.posts.filter(modified_at__gt=last)
     if modified:

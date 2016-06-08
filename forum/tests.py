@@ -25,12 +25,12 @@ class TestSuite(TestCase):
         self.assertContains(response, "Grothendieck Primes")
 
     def test_quickpost_and_list(self):
-        response = self.client.post('/topics/1/', {'content': "57"}, follow=True)
+        response = self.client.post('/topics/1/reply/', {'content': "57"}, follow=True)
         self.assertContains(response, "57")
         self.assertContains(response, "#1")
 
     def test_post_then_list(self):
-        response = self.client.post('/topics/1/new/', {'content': "57"}, follow=True)
+        response = self.client.post('/topics/1/reply/', {'content': "57"}, follow=True)
         self.assertContains(response, "57")
 
     def test_edit_then_list(self):
@@ -53,8 +53,8 @@ class TestSuite(TestCase):
         self.client.get('/')
 
     def test_post_squash(self):
-        self.client.post('/topics/1/new/', {'content': "5"})
-        self.client.post('/topics/1/new/', {'content': "7"})
+        self.client.post('/topics/1/reply/', {'content': "5"})
+        self.client.post('/topics/1/reply/', {'content': "7"})
         response = self.client.post('/topics/1/squash/3/', follow=True)
         self.assertNotContains(response, "#3")
         self.assertContains(response, "5<br /><br />7")

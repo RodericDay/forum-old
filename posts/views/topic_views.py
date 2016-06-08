@@ -43,9 +43,6 @@ def topics_new(request):
     context['post'] = {'content': request.POST.get("content", "")}
     return render(request, 'posts/topic_form.html', context)
 
-def topics_delete(request):
-    return HttpResponseRedirect("/")
-
 def topics_ajax(request):
     if "ids" not in request.GET:
         return HttpResponse("")

@@ -1,6 +1,6 @@
 {% block body %}
 <style>
-html, body { white-space: nowrap; }
+html, body { white-space: nowrap; text-align: right; }
 </style>
 
 <form id="new" method="post" enctype="multipart/form-data" hidden>
@@ -16,7 +16,7 @@ html, body { white-space: nowrap; }
 </svg>
 
 {% for image in image_list %}
-<img src="/uploads/{{image.thumbnail}}" height="70" onclick="copyTag(this)"/>
+<br><img src="/uploads/{{image.thumbnail}}" width="70" onclick="copyTag(this)"/>
 <!-- &lt;img src="https://forum.roderic.ca/uploads/{{image.raw}}"/&gt; -->
 {% if false and request.user.is_superuser %}
 <form method="post" action="{% url 'images-delete' image.id %}">

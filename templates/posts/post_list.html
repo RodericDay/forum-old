@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
+
 {% block title %}{{topic.name}}{% endblock %}
+
+{% block actions %}
+<a href="{% url 'posts-reply' topic.id %}">reply</a>
+{% endblock %}
+
 {% block body %}
 <b>{{topic.name}}</b>
 {% include 'posts/topic_tag_form.html' %}
@@ -10,8 +16,72 @@
 No posts.
 {% endfor %}
 </div>
-<div id="latest" style="color: transparent;">{% now 'Y-m-d H:i:sO' %}</div>
+<div id="latest" style="color: #eee;">{% now 'Y-m-d H:i:sO' %}</div>
 <br>
-{% include 'posts/post_editor.html' %}
-{% include 'posts/post_live.html' %}
+
+<div id="sidebar">
+<form id="quick" method="post" action="#latest">
+{% csrf_token %}
+<input name="content" autocomplete="off" />
+<input type="submit" value="Quickpost" />
+</form>
+</div>
+
+<script>
+var firstTap = true;
+function selectPost(event) {
+    if (firstTap) {
+        firstTap = false;
+        window.setTimeout(function(){firstTap = true;}, 500);
+        return
+    }
+    if (window.confirm("Navigate away from this page?")) {
+        window.location = this.dataset.url;
+    }
+}
+function createOrUpdate(slug) {
+    var existing = document.getElementById(slug.id);
+    if (!existing) {
+        container.innerHTML += slug.html;
+        notificationCount += 1;
+        document.title = originalTitle + " (" + notificationCount + ")";
+    } else {
+        existing.outerHTML = slug.html;
+    }
+}
+function load() {
+    var atBottom = window.scrollY + window.innerHeight > latest.offsetTop;
+    JSON.parse(this.response).forEach(createOrUpdate);
+    latest.innerHTML = (new Date()).toISOString();
+    if (!document.hidden & atBottom) {
+        latest.scrollIntoView();
+        notificationCount = 0;
+        document.title = originalTitle;
+    }
+    // hook click event
+    var iterable = [].slice.apply(document.getElementsByClassName("post"));
+    iterable.forEach(function(post){post.onclick = selectPost});
+}
+function query(event) {
+    var payload = "topic={{topic.id}}"
+    payload += "&csrfmiddlewaretoken="+quick.csrfmiddlewaretoken.value;
+    payload += "&timestamp="+latest.innerHTML;
+    if (event && event.type === "submit") {
+        payload += "&content="+quick.content.value;
+        quick.content.value = '';
+        latest.scrollIntoView();
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "{% url 'posts-ajax' topic.id %}", true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send(payload);
+    xhr.onload = load;
+    return false
+}
+var originalTitle = document.title;
+var notificationCount = 0;
+quick.onsubmit = query;
+window.setInterval(query, 5000);
+window.onpageshow = query;
+</script>
 {% endblock %}

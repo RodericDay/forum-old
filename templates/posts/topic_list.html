@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+
 {% block actions %}
 <a href="{% url 'topics-new' %}">new</a>
 {% endblock %}
+
 {% block body %}
 {% for topic in topic_list %}
 {% include 'posts/topic.html' %}
