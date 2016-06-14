@@ -1,6 +1,6 @@
 import os
 from datetime import timedelta
-from PIL import Image as PImage
+from PIL import Image as PImage, ExifTags
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -30,21 +30,38 @@ class Image(models.Model):
 
     @property
     def thumbnail(self):
-        o_path = self.raw.path
-        t_path = o_path.replace('images', 'thumbnails', 1)
-        if not os.path.isfile(t_path):
-            try:
-                original = PImage.open(o_path)
-            except:
-                default = os.path.join(STATIC_ROOT, 'document.png')
-                original = PImage.open(default)
-            r = min(300/max(original.width, original.height), 1)
-            s = (int(r*original.width), int(r*original.height))
-            thumbnail = original.resize(s)
-            thumbnail.save(t_path)
+        infile = self.raw.path
+        outfile = infile.replace('images', 'thumbnails', 1)
+        if not os.path.isfile(outfile):
+            make_thumbnail(infile, outfile)
         return str(self.raw).replace('images', 'thumbnails', 1)
 
     def full_delete(self):
         if os.path.isfile(self.raw.path):
             os.remove(self.raw.path)
         super().delete()
+
+def make_thumbnail(infile, outfile):
+    try:
+        im = PImage.open(infile)
+    except:
+        default = os.path.join(STATIC_ROOT, 'document.png')
+        im = PImage.open(default)
+
+    try:
+        code = im._getexif()[274]
+        mapping = {
+            1: lambda im: im,
+            3: lambda im: im.transpose(PImage.ROTATE_180),
+            6: lambda im: im.transpose(PImage.ROTATE_270),
+            8: lambda im: im.transpose(PImage.ROTATE_90),
+        }
+        im = mapping[code](im)
+    except:
+        pass
+
+    r = min(300/max(im.width, im.height), 1)
+    s = (int(r*im.width), int(r*im.height))
+    im.thumbnail(s, PImage.ANTIALIAS)
+    im.save(outfile, "JPEG")
+
