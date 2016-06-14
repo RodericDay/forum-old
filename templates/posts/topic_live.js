@@ -1,4 +1,3 @@
-<script>
 function indexes(collection) {
     return [].slice.apply(collection).map(function(el){return el.id});
 }
@@ -20,4 +19,3 @@ var topics = document.getElementsByClassName("topic");
 var ids = indexes(topics);
 var firstLoad = true;
 window.onpageshow = query;
-</script>

@@ -74,7 +74,7 @@ def user_list_view(request):
             user = User.objects.create(username=username)
             user.set_password("password")
             user.save()
-    context["user_list"] = User.objects.all().order_by("username")
+    context["user_list"] = User.objects.all().order_by("-profile__last_active")
     for user in context["user_list"]:
         ts = [r.post.modified_at for r in user.record_set.all() if r.post_id]
         if ts:

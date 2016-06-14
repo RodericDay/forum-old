@@ -32,7 +32,7 @@ var firstTap = true;
 function selectPost(event) {
     if (firstTap) {
         firstTap = false;
-        window.setTimeout(function(){firstTap = true;}, 500);
+        window.setTimeout(function(){firstTap = true;}, 300);
         return
     }
     if (window.confirm("Navigate away from this page?")) {

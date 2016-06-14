@@ -5,8 +5,10 @@
 {% endblock %}
 
 {% block body %}
-{% for topic in topic_list %}
+<div id="topic-list">{% for topic in topic_list %}
 {% include 'posts/topic.html' %}
-{% endfor %}
-{% include 'posts/topic_live.html' %}
+{% endfor %}</div>
+<script>
+{% include 'posts/topic_live.js' %}
+</script>
 {% endblock %}

@@ -3,7 +3,20 @@
 
 {% block title %}{{action}} post #{{post.id}}{% endblock %}
 
+
 {% block body %}
+<style>
+.tab { position: fixed; left: 0; background-color: #fafafa; }
+label.tab { margin-left: 1.5em; }
+#replyCheck:not(:checked) ~ #sidebar { display: none; }
+#imageCheck:not(:checked) ~ .iframe-scroll-wrapper { display: none; }
+</style>
+
+<input class="tab" type="checkbox" id="replyCheck" checked />
+<label class="tab" for="replyCheck">reply</label><br>
+<input class="tab" type="checkbox" id="imageCheck" />
+<label class="tab" for="imageCheck">upload</label>
+
 <ul>{% for topic in post.topic_set.all %}
 {% include 'posts/topic.html' %}
 {% endfor %}</ul>
