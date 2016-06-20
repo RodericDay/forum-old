@@ -66,3 +66,6 @@ class TestSuite(TestCase):
     def test_tag_filter(self):
         response = self.client.get('/topics/?tags=politics')
         self.assertNotContains(response, 'Grothendieck Primes')
+
+    def test_ajax(self):
+        response = self.client.get('/topics/1/ajax/')

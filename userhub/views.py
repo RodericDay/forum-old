@@ -2,8 +2,8 @@ import pytz
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseForbidden
 
 from userhub.models import User, Profile, Image
 
@@ -18,7 +18,7 @@ def login_view(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return HttpResponseRedirect("/profile/")
+            return redirect("profile")
         else:
             context = {'error': 'disabled account'}
     else:
@@ -36,7 +36,7 @@ def home_view(request):
         if tz in pytz.common_timezones:
             profile.timezone = tz
         profile.save()
-        return HttpResponseRedirect('/profile/')
+        return redirect('profile')
 
     context = {
         'profile': profile,
@@ -46,7 +46,7 @@ def home_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect('/login')
+    return redirect('login')
 
 def change_password_view(request):
     context = {}

@@ -1,8 +1,8 @@
 import json
 
 from django.core.urlresolvers import reverse_lazy
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404, HttpResponse, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -28,7 +28,7 @@ def posts_reply(request, topic_id):
     if request.method == "POST":
         post = topic.posts.create(author=request.user, content=request.POST['content'])
         url = topic.get_absolute_url() + "#" + str(post.id)
-        return HttpResponseRedirect(url)
+        return redirect(url)
 
     return render(request, 'posts/post_detail.html')
 
@@ -39,15 +39,14 @@ def posts_edit(request, post_id):
 
     context = {'action': 'edit', 'post': post}
     if request.method == "POST":
-        url = post.get_absolute_url()
+
         if "delete" in request.POST:
             post.content = "[deleted]"
-            post.save()
-            return HttpResponseRedirect(url)
+        else:
+            post.content = request.POST['content']
 
-        post.content = request.POST['content']
         post.save()
-        return HttpResponseRedirect(url)
+        return redirect(post)
 
     return render(request, 'posts/post_detail.html', context)
 
@@ -61,7 +60,7 @@ def posts_squash(request, topic_id, post_id):
             head_post.save()
             tail_post.delete()
     url = topic.get_absolute_url() + "#" + str(head_post.id)
-    return HttpResponseRedirect(url)
+    return redirect(url)
 
 def posts_ajax(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
@@ -79,7 +78,7 @@ def posts_ajax(request, topic_id):
             else:
                 topic.posts.create(author=request.user, content=content)
 
-    last = request.POST.get('timestamp', 0)
+    last = request.POST.get('timestamp', '1999-01-01 23:59Z')
     modified = topic.posts.filter(modified_at__gt=last)
     if modified:
         Record.new(user=request.user, topic=topic, post=modified.last())

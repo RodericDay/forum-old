@@ -2,8 +2,8 @@ import json
 
 from django.db import connection
 from django.db.models import Max
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
 from posts.models import Topic, Record
@@ -36,7 +36,7 @@ def topics_new(request):
             content = request.POST.get("content", "")
             topic = Topic.objects.create(author=request.user, name=topic_name)
             topic.posts.create(author=request.user, content=content)
-            return HttpResponseRedirect(topic.get_absolute_url())
+            return redirect(topic)
         else:
             context['error'] = "title must be at least 5 characters long"
     context['topic'] = {'name': request.POST.get("name", "")}
@@ -58,5 +58,4 @@ def topics_ajax(request):
             html = render_to_string('posts/topic.html', {"topic": record.topic})
             html_slugs.append({"id": record.topic_id, "html": html})
 
-    string = json.dumps(html_slugs)
-    return HttpResponse(string)
+    return JsonResponse(html_slugs, safe=False)
