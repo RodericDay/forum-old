@@ -90,7 +90,7 @@ def images_list(request):
         raw = request.FILES.get("raw")
         if raw:
             Image.objects.create(raw=raw, uploader=request.user)
-        return HttpResponseRedirect('/images/')
+        return redirect('images-list')
     return render(request, 'userhub/images.html', context)
 
 def images_delete(request, image_id):

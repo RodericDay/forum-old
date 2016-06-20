@@ -3,43 +3,31 @@
 
 {% block title %}{{action}} post #{{post.id}}{% endblock %}
 
-
 {% block body %}
-<style>
-.tab { position: fixed; left: 0; background-color: #fafafa; }
-label.tab { margin-left: 1.5em; }
-#replyCheck:not(:checked) ~ #sidebar { display: none; }
-#imageCheck:not(:checked) ~ .iframe-scroll-wrapper { display: none; }
-</style>
-
-<input class="tab" type="checkbox" id="replyCheck" checked />
-<label class="tab" for="replyCheck">reply</label><br>
-<input class="tab" type="checkbox" id="imageCheck" />
-<label class="tab" for="imageCheck">upload</label>
-
-<ul>{% for topic in post.topic_set.all %}
+<ul>{% for topic in topic_list %}
 {% include 'posts/topic.html' %}
 {% endfor %}</ul>
 
 <div id="htmlPreview">
-{% include 'posts/post.html' %}
+{% if post %}{% include 'posts/post.html' %}{% endif %}
 </div>
 
-<div id="sidebar">
-<input id="r1" size="10" />
-<input id="r2" size="10" />
-<button onclick="clean()">Regex</button>
-<form method="post">
-{% csrf_token %}
-<span class="error">{{error}}</span>
-<textarea id="htmlInput" name="content" autofocus>{{post.content}}</textarea>
-<input type="submit" name="save" value="Save" />
-<span id="htmlEditorTarget"></span>
-</form>
-</div>
+<div class="fixed bottom left">
+  <style>#replyCheck:checked ~ #replyTab { display: block; }</style>
+  <input class="" type="checkbox" id="replyCheck" checked />
+  <label class="" for="replyCheck">reply</label>
 
-<div class="iframe-scroll-wrapper">
-<iframe src="/images/"></iframe>
+  <div id="replyTab" class="bottom left hidden">
+  <input id="r1" size="10" />
+  <input id="r2" size="10" />
+  <button onclick="clean()">Regex</button>
+  <form method="post">
+  {% csrf_token %}
+  <span class="error">{{error}}</span>
+  <textarea id="htmlInput" name="content" autofocus>{{post.content}}</textarea>
+  <input type="submit" name="save" value="Save" />
+  <span id="htmlEditorTarget"></span>
+  </form>
 </div>
 
 {% if post.id %}

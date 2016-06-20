@@ -19,7 +19,7 @@ No posts.
 <div id="latest" style="color: #eee;">{% now 'Y-m-d H:i:sO' %}</div>
 <br>
 
-<div id="sidebar">
+<div class="fixed bottom left">
 <form id="quick" method="post" action="#latest">
 {% csrf_token %}
 <input name="content" autocomplete="off" />

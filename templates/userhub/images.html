@@ -16,7 +16,7 @@ html, body { white-space: nowrap; text-align: right; }
 </svg>
 
 {% for image in image_list %}
-<br><img src="/uploads/{{image.thumbnail}}" width="70" onclick="copyTag(this)"/>
+<br><img src="/uploads/{{image.thumbnail}}" width="70" />
 <!-- &lt;img src="https://forum.roderic.ca/uploads/{{image.raw}}"/&gt; -->
 {% if false and request.user.is_superuser %}
 <form method="post" action="{% url 'images-delete' image.id %}">
@@ -27,10 +27,6 @@ html, body { white-space: nowrap; text-align: right; }
 {% endfor %}
 
 <script>
-function copyTag(img) {
-    var realSrc = img.src.replace(/thumbnails/, 'images');
-    window.prompt("Copy and paste this link:", '<img src="'+realSrc+'"/>');
-}
 realUploadButton.onchange = function() { submitButton.click() }
 uploadButton.onclick = function() { realUploadButton.click() }
 </script>

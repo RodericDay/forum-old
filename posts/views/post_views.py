@@ -30,7 +30,8 @@ def posts_reply(request, topic_id):
         url = topic.get_absolute_url() + "#" + str(post.id)
         return redirect(url)
 
-    return render(request, 'posts/post_detail.html')
+    context = {'topic_list': [topic]}
+    return render(request, 'posts/post_detail.html', context)
 
 def posts_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -48,6 +49,7 @@ def posts_edit(request, post_id):
         post.save()
         return redirect(post)
 
+    context['topic_list'] = post.topic_set.all()
     return render(request, 'posts/post_detail.html', context)
 
 def posts_squash(request, topic_id, post_id):
