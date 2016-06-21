@@ -1,11 +1,11 @@
 {% load humanize %}
-<div class="topic {{topic.tags_as_string}}" id="{{topic.id}}">
+<div class="topic" id="{{topic.id}}">
 
 {% spaceless %}
 <a href="{{topic.get_absolute_url}}#latest">
 <span class="topic-status">
-<div>{{topic.unseen}} new</div>
-<small>{{topic.posts.count}} post{{topic.posts.count|pluralize}}</small>
+<div>{{topic.unseen_count}} new</div>
+<small>{{topic.post_count}} post{{topic.post_count|pluralize}}</small>
 </span>
 </a>
 {% endspaceless %}
@@ -15,8 +15,8 @@
 <br>
 <small>
 by {{topic.author}}
-{% if topic.author.profile.is_online %}<span class="online-indicator">●</span>{% endif %}
-| last post {{topic.posts.last.created_at|naturaltime}}
+{% if topic.author.profile %}<span class="online-indicator">●</span>{% endif %}
+| last post {{topic.last_post|naturaltime}}
 <i>{{topic.tags_as_string}}</i>
 </small>
 </a>

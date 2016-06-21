@@ -16,6 +16,9 @@ class Post(models.Model):
     def allows_access(self, user):
         return user.is_superuser or user == self.author
 
+    def __str__(self):
+        return "{} p{}".format(self.author, self.id)
+
 
 class Tag(models.Model):
     ACCESS_CHOICES = [
@@ -29,6 +32,9 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return reverse('tags-edit', args=[self.name])
+
+    def __str__(self):
+        return self.name
 
 
 class Topic(models.Model):
@@ -71,3 +77,6 @@ class Record(models.Model):
         if new or post.id > record.post.id:
             record.post = post
             record.save()
+
+    def __str__(self):
+        return "{} t{} p{}".format(self.user, self.topic_id, self.post_id)

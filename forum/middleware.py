@@ -17,7 +17,7 @@ class TimezoneMiddleware(object):
 
     def process_request(self, request):
         if request.user.is_authenticated():
-            tz = pytz.timezone(request.user.profile.timezone)
+            tz = pytz.timezone(request.user.get_profile.timezone)
             timezone.activate(tz)
             profile = request.user.profile
             profile.last_active = timezone.now()

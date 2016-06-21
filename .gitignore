@@ -2,6 +2,7 @@ __pycache__/
 *.sublime-workspace
 *.sqlite3
 backup.json
+dump.json
 /static/
 uploads/
 .DS_Store

@@ -1,6 +1,6 @@
 set -e
 git add -u
-git commit --amend --no-edit
+git commit --amend --no-edit --allow-empty
 git push -f
 ssh roderic@projects.roderic.ca "cd forum && git reset --hard HEAD"
 ssh roderic@projects.roderic.ca "forum/manage.py migrate"

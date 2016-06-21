@@ -20,7 +20,7 @@ class Profile(models.Model):
         return (tz.now() - self.last_active) < timedelta(minutes=1)
 
 
-User.profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
+User.get_profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
 
 
 class Image(models.Model):
@@ -40,6 +40,7 @@ class Image(models.Model):
         if os.path.isfile(self.raw.path):
             os.remove(self.raw.path)
         super().delete()
+
 
 def make_thumbnail(infile, outfile):
     try:
@@ -64,4 +65,3 @@ def make_thumbnail(infile, outfile):
     s = (int(r*im.width), int(r*im.height))
     im.thumbnail(s, PImage.ANTIALIAS)
     im.save(outfile, "JPEG")
-

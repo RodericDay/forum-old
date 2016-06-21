@@ -53,23 +53,15 @@ article a { color: red; }
 }
 .online-indicator { color: #4b4; }
 .iframe-scroll-wrapper {
-    /*height: 100%;*/
     width: 100px;
     /* ios scrolling fix */
     overflow: scroll;
     -webkit-overflow-scrolling: touch;"
 }
 .iframe-scroll-wrapper iframe { width: 100px; }
-#AdContainer { position: fixed; top: 0; left: 0; height: 100%; width: 100%; }
 </style>
 </head>
 <body class="pale">
-{# comment #}
-<div id="AdContainer">
-  I see you are not using an ad-blocker. This page will only render properly<br>
-  if you block ads! Consider installing µBlock&nbsp;Origin or AdBlock&nbps;Plus.
-</div>
-{# endcomment #}
 {% block nav %}
 <nav>
 {% block actions %}{% endblock %}
@@ -85,5 +77,6 @@ article a { color: red; }
 This is the base template. Add a body block!
 {% endblock %}
 {% include 'posts/image_frame.html' %}
+<div>sqlly stuff: {{sqlly_stuff}}</div>
 </body>
 </html>
