@@ -21,10 +21,11 @@ class Post(models.Model):
 
 
 class Tag(models.Model):
+    ALL, WHITELIST, BLACKLIST = 0, 1, 2
     ACCESS_CHOICES = [
-        (0, "all"),
-        (1, "whitelist"),
-        (2, "blacklist"),
+        (ALL, "all"),
+        (WHITELIST, "whitelist"),
+        (BLACKLIST, "blacklist"),
     ]
     name = models.CharField(max_length=60, unique=True)
     access_list = models.ManyToManyField(User)
@@ -66,7 +67,7 @@ class Topic(models.Model):
 class Record(models.Model):
     user = models.ForeignKey(User)
     topic = models.ForeignKey(Topic)
-    post = models.ForeignKey(Post, default=0)
+    post = models.ForeignKey(Post, default=1)
 
     class Meta:
         unique_together = ("user", "topic")
@@ -79,4 +80,4 @@ class Record(models.Model):
             record.save()
 
     def __str__(self):
-        return "{} t{} p{}".format(self.user, self.topic_id, self.post_id)
+        return "u{} t{} p{}".format(self.user_id, self.topic_id, self.post_id)

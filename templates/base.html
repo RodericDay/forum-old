@@ -41,7 +41,7 @@ article a { color: red; }
     margin: 5px;
 }
 .topic a { text-decoration: none; }
-.sticky { font-weight: bold; }
+.unseen { font-weight: bold; }
 .secret { opacity: 0.5; }
 .topic-status {
     float: right;
@@ -77,6 +77,6 @@ article a { color: red; }
 This is the base template. Add a body block!
 {% endblock %}
 {% include 'posts/image_frame.html' %}
-<div>sqlly stuff: {{sqlly_stuff}}</div>
+{% if sqlly_stuff %}<div>sqlly stuff: {{sqlly_stuff}}</div>{% endif %}
 </body>
 </html>

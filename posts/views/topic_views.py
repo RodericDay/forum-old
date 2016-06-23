@@ -1,6 +1,6 @@
 import json, time
 
-from django.db.models import Count, Max, F, Q
+from django.db.models import *
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -9,43 +9,52 @@ from userhub.models import User
 from posts.models import Topic, Record, Tag
 
 
-def topics_list(request):
-    t0 = time.time()
+def get_topics(user, tag_name_list=None, topic_id_list=None):
+    if tag_name_list:
+        tags = Tag.objects.filter(name__in=tag_name_list)
+        tag_ids = tags.values_list("topic", flat=True)
+        All = Topic.objects.filter(id__in=tag_ids)
+    else:
+        All = Topic.objects
 
-    a, b, c, d = (set((q).values_list('topic', flat=True).distinct()) for q in
+    w, b, wu, bu = (set(q.values_list('topic', flat=True)) for q in
         [
-            # is whitelist and not in whitelist
-            Tag.objects.filter(access_mode=1),
-            request.user.tag_set.filter(access_mode=1),
-            # is blacklist and in blacklist
-            Tag.objects.filter(access_mode=2),
-            request.user.tag_set.filter(access_mode=2),
+            Tag.objects.filter(access_mode=Tag.WHITELIST),
+            Tag.objects.filter(access_mode=Tag.BLACKLIST),
+            user.tag_set.filter(access_mode=Tag.WHITELIST),
+            user.tag_set.filter(access_mode=Tag.BLACKLIST),
         ]
     )
+    blocked = tuple((w-wu)|(b&bu))
 
-    topics = (Topic.objects
-        .exclude(id__in=(a-b)|(c&d))
-        .annotate(last_post=Max('posts__created_at'))
-        .order_by('-last_post')
+    topics = (All
+        .exclude(id__in=blocked)
+        .annotate(last_update=Max('posts__created_at'))
+        .annotate(post_count=Count('posts'))
+        .order_by('-last_update')
         .select_related('author__profile')
-        .prefetch_related('tags', 'posts')
-    )[:20]
+        .prefetch_related('tags', 'posts__author__profile')
+    )[:50]
+    topic_ids = topics.values_list("id", flat=True)
 
-    t1 = time.time()
-
-    last_seen = {r.topic_id: r.post_id for r in request.user.record_set.all()}
+    records = {r.topic_id:r.post_id for r in Record.objects
+        .filter(user=user, topic_id__in=topic_ids)
+        .select_related('post')
+    }
 
     for topic in topics:
-        p, u = 0, 0
-        for post in topic.posts.all():
-            p += 1
-            u += post.id > last_seen.get(topic.id, 0)
-        topic.post_count = p
-        topic.unseen_count = u
+        n = records.get(topic.id)
+        if n:
+            topic.unseen_count = sum(p.id > n for p in topic.posts.all())
+        else:
+            topic.unseen_count = topic.post_count
+        topic.last_post = topic.posts.all()[:][-1]
 
-    t2 = time.time()
-    sqlly = "{:.5f}s, {:.1f}% in python".format(t2-t0, 100-100*(t1-t0)/(t2-t0))
-    context = {'topic_list': topics, 'sqlly_stuff': sqlly}
+    return topics
+
+
+def topics_list(request):
+    context = {'topic_list': get_topics(request.user, request.GET.getlist("tag"))}
     return render(request, 'posts/topic_list.html', context)
 
 def topics_new(request):
@@ -67,14 +76,10 @@ def topics_ajax(request):
     if "ids" not in request.GET:
         return HttpResponse("")
 
-    ids = [int(s) for s in request.GET["ids"].split(',')]
+    topic_id_list = [int(s) for s in request.GET.getlist("ids")]
 
     html_slugs = []
-    for record in Record.objects.filter(user=request.user, topic_id__in=ids):
-        topic = record.topic
-        if record.topic.allows_access(request.user):
-            topic.last_seen = record.post_id
-            topic.unseen = topic.posts.filter(id__gt=topic.last_seen).count()
+    for topic in get_topics(request.user, topic_id_list):
             html = render_to_string('posts/topic.html', {"topic": record.topic})
             html_slugs.append({"id": record.topic_id, "html": html})
 

@@ -3,7 +3,7 @@
 <b>tag list</b>
 {% for tag in tag_list %}
 <div>
-<a href="{% url 'topics-list' %}?tags={{tag.name}}">{{tag.name}}</a>
+<a href="{% url 'topics-list' %}?tag={{tag.name}}">{{tag.name}}</a>
 {% if request.user.is_superuser %}
 <small><a href="{% url 'tags-edit' tag.name %}">edit</a></small>
 {% endif %}
