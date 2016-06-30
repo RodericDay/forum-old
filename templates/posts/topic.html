@@ -1,5 +1,5 @@
 {% load humanize %}
-<div class="topic{% if topic.unseen_count %} unseen{% endif %}" id="{{topic.id}}">
+<div class="topic{% if topic.unseen_count %} unseen{% endif %} {{topic.tags_as_string}}" id="{{topic.id}}">
 
 {% spaceless %}
 <a href="{{topic.get_absolute_url}}#latest">
