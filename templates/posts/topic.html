@@ -15,9 +15,14 @@
 <small>
 <div>
 last post {{topic.last_post.created_at|naturaltime}}
-by {{topic.last_post.author}}
-{% if topic.last_post.author.profile.is_online %}
-<span class="online-indicator">●</span>{% endif %}
+{% if topic.last_post.author == request.user %}
+  by you
+{% else %}
+  by {{topic.last_post.author}}
+  {% if topic.last_post.author.profile.is_online %}
+  <span class="online-indicator">●</span>
+  {% endif %}
+{% endif %}
 </div>
 <div><i>{{topic.tags_as_string}}&nbsp;</i></div>
 </small>

@@ -32,9 +32,12 @@ def get_topics(user, tag_name_list=None, topic_id_list=None):
         .annotate(last_update=Max('posts__created_at'))
         .annotate(post_count=Count('posts'))
         .order_by('-last_update')
+    )[:50]
+
+    topics = (topics
         .select_related('author__profile')
         .prefetch_related('tags', 'posts__author__profile')
-    )[:50]
+    )
     topic_ids = topics.values_list("id", flat=True)
 
     records = {r.topic_id:r.post_id for r in Record.objects
