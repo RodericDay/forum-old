@@ -67,7 +67,7 @@ function query(event) {
     payload += "&csrfmiddlewaretoken="+quick.csrfmiddlewaretoken.value;
     payload += "&timestamp="+latest.innerHTML;
     if (event && event.type === "submit") {
-        payload += "&content="+quick.content.value;
+        payload += "&content="+encodeURIComponent(quick.content.value);
         quick.content.value = '';
         latest.scrollIntoView();
     }
