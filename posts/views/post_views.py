@@ -1,3 +1,6 @@
+from datetime import timedelta
+from django.utils import timezone
+
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -68,7 +71,8 @@ def get_posts(topic, user, timestamp, content=None):
 
     tail = topic.posts.last()
     if content:
-        if tail.author == user:
+        fresh = timezone.now() - tail.created_at < timedelta(minutes=2)
+        if tail.author == user and fresh:
             tail.content += '\n\n' + content
             tail.created_at = timezone.now()
             tail.save()

@@ -9,7 +9,6 @@ class TestSuite(TestCase):
         user = User.objects.get(username="ethan")
         self.client.force_login(user)
 
-
     def test_profile(self):
         response = self.client.get('/profile/')
         self.assertContains(response, "welcome, ethan!")
