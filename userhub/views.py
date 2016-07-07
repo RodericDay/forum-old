@@ -30,9 +30,11 @@ def home_view(request):
 
     if request.method == "POST":
         tz = request.POST.get("timezone")
-        new_avatar = request.FILES.get("avatar")
-        if new_avatar:
+        img = request.FILES.get("avatar")
+        if img:
+            new_avatar = Image.objects.create(raw=img, uploader=request.user)
             profile.avatar = new_avatar
+            profile.save()
         if tz in pytz.common_timezones:
             profile.timezone = tz
         profile.save()

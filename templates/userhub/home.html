@@ -6,7 +6,7 @@
 {% endwith %}
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
-<p><img src="/uploads/{{profile.avatar}}" width="100px"/></p>
+<p><img src="/uploads/{{profile.avatar.thumbnail}}" width="100px"/></p>
 <p><input name="avatar" type="file" /></p>
 <p><select name="timezone">
 {% for tz in timezones %}

@@ -9,20 +9,6 @@ from django.utils import timezone as tz
 from forum.settings import STATIC_ROOT
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User)
-    avatar = models.ImageField(upload_to='avatars', default='avatars/default.jpg')
-    timezone = models.CharField(max_length=255, default="Canada/Eastern")
-    last_active = models.DateTimeField(default=tz.now)
-
-    @property
-    def is_online(self):
-        return (tz.now() - self.last_active) < timedelta(minutes=1)
-
-
-User.get_profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
-
-
 class Image(models.Model):
     raw = models.ImageField(upload_to='images')
     uploader = models.ForeignKey(User)
@@ -65,3 +51,17 @@ def make_thumbnail(infile, outfile):
     s = (int(r*im.width), int(r*im.height))
     im.thumbnail(s, PImage.ANTIALIAS)
     im.save(outfile, "JPEG")
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User)
+    avatar = models.ForeignKey(Image, default=1)
+    timezone = models.CharField(max_length=255, default="Canada/Eastern")
+    last_active = models.DateTimeField(default=tz.now)
+
+    @property
+    def is_online(self):
+        return (tz.now() - self.last_active) < timedelta(minutes=1)
+
+
+User.get_profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
