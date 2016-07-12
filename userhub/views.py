@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
 
-from userhub.models import User, Profile, Image
+from userhub.models import User, Profile, Image, Todo
 
 
 def login_view(request):
@@ -43,6 +43,7 @@ def home_view(request):
     context = {
         'profile': profile,
         'timezones': pytz.common_timezones,
+        'todo_list': Todo.objects.filter(user=request.user),
     }
     return render(request, 'userhub/home.html', context)
 
@@ -101,3 +102,12 @@ def images_delete(request, image_id):
         image.full_delete()
         return HttpResponseRedirect('/images/')
     return HttpResponseForbidden()
+
+def todos_ajax(request):
+    if request.method == "POST":
+        description = request.POST.get("description")
+        if description is None:
+            Todo.objects.filter(user=request.user, id=request.POST["id"]).delete()
+        else:
+            Todo.objects.create(user=request.user, description=description)
+    return redirect('profile')

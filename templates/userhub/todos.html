@@ -1,0 +1,17 @@
+<strong>to-do list</strong>
+{% for todo in todo_list %}
+<div>
+<form action="{% url 'todos-ajax' %}" method="post">
+{% csrf_token %}
+<input type="hidden" name="id" value="{{todo.id}}"/>
+<input type="submit" value="-"/>
+<small>{{todo.description}}</small>
+</form>
+</div>
+{% endfor %}
+
+<form action="{% url 'todos-ajax' %}" method="post">
+{% csrf_token %}
+<input type="submit" value="+" />
+<input name="description" autocomplete="off" />
+</form>

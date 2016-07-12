@@ -53,6 +53,7 @@ def make_thumbnail(infile, outfile):
     im.save(outfile, "JPEG")
 
 
+User.get_profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
 class Profile(models.Model):
     user = models.OneToOneField(User)
     avatar = models.ForeignKey(Image, default=1)
@@ -64,4 +65,6 @@ class Profile(models.Model):
         return (tz.now() - self.last_active) < timedelta(minutes=1)
 
 
-User.get_profile = property(lambda u: Profile.objects.get_or_create(user=u)[0])
+class Todo(models.Model):
+    user = models.ForeignKey(User)
+    description = models.TextField()

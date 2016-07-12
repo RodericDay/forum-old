@@ -31,8 +31,9 @@ urlpatterns = [
     url(r'^profile/$', home_view, name='profile'),
     url(r'^login/$', login_view, name='login'),
     url(r'^logout/$', logout_view, name='logout'),
-    url(r'^user-list/$', user_list_view, name='user-list'),
+    url(r'^users/$', user_list_view, name='user-list'),
     url(r'^change-password/$', change_password_view, name='change-password'),
+    url(r'^todos/ajax/$', todos_ajax, name='todos-ajax'),
 
     url(r'^secret/', include(admin.site.urls)),
 ]

@@ -9,14 +9,15 @@
 <p><img src="/uploads/{{profile.avatar.thumbnail}}" width="100px"/></p>
 <p><input name="avatar" type="file" /></p>
 <p><select name="timezone">
-{% for tz in timezones %}
-<option value="{{tz}}"{% if tz == profile.timezone %} selected {% endif %}>
-{{tz}}
-</option>
-{% endfor %}
+{% spaceless %}{% for tz in timezones %}
+<option value="{{tz}}"{% if tz == profile.timezone %} selected {% endif %}>{{tz}}</option>
+{% endfor %}{% endspaceless %}
 </select></p>
 <input type="submit" value="Update">
 </form>
+
+{% include 'userhub/todos.html' %}
+
 <nav>
 <a href="{% url 'change-password' %}">change password</a>
 <a href="{% url 'logout' %}">logout</a>
