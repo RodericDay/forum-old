@@ -73,6 +73,7 @@ article a { color: red; }
 <a href="{% url 'profile' %}">profile</a>
 {% if request.user.is_superuser %}
 <a href="{% url 'user-list' %}">users</a>
+<a href="/hn/">hn</a>
 {% endif %}
 </nav>
 {% endblock %}

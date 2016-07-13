@@ -5,6 +5,7 @@ from django.contrib import admin
 from posts.views.post_views import *
 from posts.views.topic_views import *
 from posts.views.tags_views import *
+from posts.views.portals import *
 from userhub.views import *
 
 urlpatterns = [
@@ -34,6 +35,8 @@ urlpatterns = [
     url(r'^users/$', user_list_view, name='user-list'),
     url(r'^change-password/$', change_password_view, name='change-password'),
     url(r'^todos/ajax/$', todos_ajax, name='todos-ajax'),
+
+    url(r'^hn/', hackernews, name="hackernews"),
 
     url(r'^secret/', include(admin.site.urls)),
 ]
