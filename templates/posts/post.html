@@ -1,18 +1,31 @@
 {% load posts_tags %}
 <div class="post" id="{{post.id}}" data-url="{% url 'posts-edit' post.id %}">
 <hr>
+
 <small>
 {{post.author}}
-{% if post.author.profile.is_online %}<span class="online-indicator">●</span>{% endif %}
+
+{% if post.author.profile.is_online %}
+<span class="online-indicator">●</span>
+{% endif %}
+
 {{post.created_at}}
 <a href="{% url 'posts-edit' post.id %}">detail</a>
+
 {% if topic and request.user.is_superuser %}
 <a href="{% url 'posts-squash' topic.id post.id %}">squash</a>
 {% endif %}
-{% if forloop %} #{{forloop.counter}}{% endif %}
+
+{% if forloop %}
+#{{forloop.counter}}
+{% endif %}
+
+{% if post.author.profile.avatar.raw %}
 <a href="/uploads/{{post.author.profile.avatar.raw}}">
 <img class="avatar" src="/uploads/{{post.author.profile.avatar.thumbnail}}" width="40px"/>
 </a>
+{% endif %}
 </small>
+
 <p class="breakable">{{post.content|linebreaksbr|bleach}}</p>
 </div>

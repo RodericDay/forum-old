@@ -32,7 +32,7 @@ def get_topics(user, tag_name_list=None, topic_id_list=None):
         .annotate(last_update=Max('posts__created_at'))
         .annotate(post_count=Count('posts'))
         .order_by('-last_update')
-    )[:50]
+    )#[:50]
 
     topics = (topics
         .select_related('author__profile')
