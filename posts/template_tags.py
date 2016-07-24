@@ -29,6 +29,12 @@ def bleach(text):
         text = text.replace(pattern, intext, 1)
         text = text.replace(pattern, infoot, 1)
 
+    # quotes
+    text = re.sub(r'(^|<br />)&gt;\s*([\s\S]+?)($|<br />)', r'<blockquote>\2</blockquote>', text)
+
+    # ticks
+    text = re.sub(r'`([\s\S]+?)`', r'<span class="monospace">\1</span>', text)
+
     return text
 
 @register.filter(is_safe=True)

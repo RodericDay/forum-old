@@ -10,15 +10,13 @@
 {% endif %}
 
 {{post.created_at}}
-<a href="{% url 'posts-edit' post.id %}">detail</a>
+<a href="{{post.get_absolute_url}}">detail</a>
 
 {% if topic and request.user.is_superuser %}
 <a href="{% url 'posts-squash' topic.id post.id %}">squash</a>
 {% endif %}
 
-{% if forloop %}
-#{{forloop.counter}}
-{% endif %}
+{% if forloop %}#{{forloop.counter}}{% endif %}
 
 {% if post.author.profile.avatar.raw %}
 <a href="/uploads/{{post.author.profile.avatar.raw}}">
