@@ -80,6 +80,10 @@ article a { color: red; }
 </nav>
 {% endblock %}
 
+{% if time_taken and user.is_superuser %}
+<span>time taken: {{time_taken}}s</span>
+{% endif %}
+
 {% block body %}
 This is the base template. Add a body block!
 {% endblock %}

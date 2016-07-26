@@ -1,5 +1,4 @@
 from datetime import timedelta
-from django.utils import timezone
 
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseForbidden, JsonResponse
@@ -71,7 +70,7 @@ def posts_squash(request, post_id):
         .first()
     )
 
-    if post.author != next_in_line.author:
+    if not next_in_line or post.author != next_in_line.author:
         return HttpResponseForbidden("Posts must have same author!")
 
     post.content += '\n\n' + next_in_line.content

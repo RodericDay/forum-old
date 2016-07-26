@@ -8,7 +8,11 @@
 <div id="topic-list">{% for topic in topic_list %}
 {% include 'posts/topic.html' %}
 {% endfor %}</div>
-<!-- <script>
-{% include 'posts/topic_live.js' %}
-</script> -->
+
+<center>
+{% for page in page_list %}
+<a href="?page={{page}}">{{page}}</a>
+{% endfor %}
+</center>
+
 {% endblock %}

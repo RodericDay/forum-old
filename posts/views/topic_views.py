@@ -1,5 +1,6 @@
 import json, time
 
+from django.core.paginator import Paginator
 from django.db.models import *
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -9,7 +10,9 @@ from userhub.models import User
 from posts.models import Topic, Record, Tag
 
 
-def get_topics(user, tag_name_list=None, topic_id_list=None):
+PAGE_COUNT = 25
+
+def get_topics(user, tag_name_list=None, topic_id_list=None, page=1):
     if tag_name_list:
         tags = Tag.objects.filter(name__in=tag_name_list)
         tag_ids = tags.values_list("topic", flat=True)
@@ -32,7 +35,15 @@ def get_topics(user, tag_name_list=None, topic_id_list=None):
         .annotate(last_update=Max('posts__created_at'))
         .annotate(post_count=Count('posts'))
         .order_by('-last_update')
-    )#[:50]
+    )
+
+    if topic_id_list is None:  # pagination
+        try:
+            page = max(1, int(page))
+        except:
+            page = 1
+        A, B = (page-1)*PAGE_COUNT, (page)*PAGE_COUNT
+        topics = topics[A:B]
 
     topics = (topics
         .select_related('author__profile')
@@ -57,7 +68,14 @@ def get_topics(user, tag_name_list=None, topic_id_list=None):
 
 
 def topics_list(request):
-    context = {'topic_list': get_topics(request.user, request.GET.getlist("tag"))}
+    t0 = time.time()
+    tags = request.GET.getlist("tag")
+    page = request.GET.get("page")
+    context = {
+        'time_taken': time.time() - t0,
+        'topic_list': get_topics(request.user, tags, page=page),
+        'page_list': range(1, Topic.objects.all().count()//PAGE_COUNT+2),
+    }
     return render(request, 'posts/topic_list.html', context)
 
 def topics_new(request):
@@ -83,7 +101,7 @@ def topics_ajax(request):
 
     html_slugs = []
     for topic in get_topics(request.user, topic_id_list):
-            html = render_to_string('posts/topic.html', {"topic": record.topic})
-            html_slugs.append({"id": record.topic_id, "html": html})
+        html = render_to_string('posts/topic.html', {"topic": record.topic})
+        html_slugs.append({"id": record.topic_id, "html": html})
 
     return JsonResponse(html_slugs, safe=False)
