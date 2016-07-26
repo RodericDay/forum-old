@@ -43,6 +43,7 @@ article a { color: red; }
     margin: 5px;
 }
 .topic a { text-decoration: none; }
+.post { border-top: 1px solid black; }
 .sticky, .unseen { font-weight: bold; }
 .secret { opacity: 0.5; }
 .topic-status {
@@ -61,11 +62,11 @@ article a { color: red; }
     -webkit-overflow-scrolling: touch;"
 }
 .iframe-scroll-wrapper iframe { width: 100px; }
+.notification { color: red; }
 </style>
 </head>
 <body class="pale">
-{% for notification in notification_list %}
-{% endfor %}
+
 {% block nav %}
 <nav>
 {% block actions %}{% endblock %}
@@ -78,6 +79,7 @@ article a { color: red; }
 {% endif %}
 </nav>
 {% endblock %}
+
 {% block body %}
 This is the base template. Add a body block!
 {% endblock %}

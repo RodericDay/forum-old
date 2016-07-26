@@ -53,16 +53,32 @@ def posts_edit(request, post_id):
     context['topic_list'] = post.topic_set.all()
     return render(request, 'posts/post_detail.html', context)
 
-def posts_squash(request, topic_id, post_id):
-    topic = get_object_or_404(Topic, id=topic_id)
-    all_posts = topic.posts.filter(id__lte=post_id).order_by("-created_at")
-    tail_post, head_post = all_posts[:2]
-    if head_post.author == tail_post.author:
-        if request.user == head_post.author or request.user.is_superuser:
-            head_post.content += '\n\n' + tail_post.content
-            head_post.save()
-            tail_post.delete()
-    url = topic.get_absolute_url() + "#" + str(head_post.id)
+def posts_squash(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if not (post.author == request.user or request.user.is_superuser):
+        return HttpResponseForbidden("You don't have permission!")
+
+    if post.topic_set.count() != 1:
+        # disallow mods once branched?
+        return HttpResponseForbidden("Post must exist on one single thread!")
+
+    topic = post.topic_set.first()
+
+    next_in_line = (topic.posts
+        .filter(id__gt=post.id)
+        .order_by("created_at")
+        .first()
+    )
+
+    if post.author != next_in_line.author:
+        return HttpResponseForbidden("Posts must have same author!")
+
+    post.content += '\n\n' + next_in_line.content
+    post.save()
+    next_in_line.delete()
+
+    url = topic.get_absolute_url() + '#' + str(post.id)
     return redirect(url)
 
 def get_posts(topic, user, timestamp, content=None):
